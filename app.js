@@ -7,8 +7,8 @@ app.get('/',function(req,res){
   //__dirname : It will resolve to your project folder.
 });
 
-app.get('/part',function(req,res){
-  res.sendFile(path.join(__dirname+'/part10.html'));
+app.get('/index',function(req,res){
+  res.sendFile(path.join(__dirname+'/src/index.html'));
 });
 
 app.get('/part9',function(req,res){

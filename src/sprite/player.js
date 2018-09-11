@@ -18,25 +18,30 @@ export class Player {
 		this.scene = config.scene;
 		this.backgroundCellWidth = config.backgroundCellWidth;
     	this.backgroundCellHeight = config.backgroundCellHeight;
-
-		this.sprite = this.scene.physics.add.sprite(config.x, config.y, 'star');
+    	console.log(config.x * this.backgroundCellWidth, 
+			config.y * this.backgroundCellHeight);
+		this.sprite = this.scene.physics.add.sprite(
+			config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
+			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
+			config.playerTexture);
 		console.log(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
 	    this.sprite.setScale(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
 	    this.sprite.setCollideWorldBounds(true);
-	    this.sprite.x = this.trim(this.sprite.x, this.backgroundCellWidth);
-	    this.sprite.y = this.trim(this.sprite.y, this.backgroundCellHeight);
+	    //this.sprite.x = this.trim(this.sprite.x, this.backgroundCellWidth);
+	    //this.sprite.y = this.trim(this.sprite.y, this.backgroundCellHeight);
 	    this.bx = Math.floor(this.sprite.x / this.backgroundCellWidth);
 	    this.by = Math.floor(this.sprite.y / this.backgroundCellHeight);
     	this.oldKey = "";
 	}
     
 	update() {
+
 		var playerTopLeft = this.sprite.getTopLeft();
     	var playerBottomRight = this.sprite.getBottomRight();
 	    if (this.oldKey != "") {
 	        var bx = Math.floor(this.dstx / this.backgroundCellWidth);
 	        var by = Math.floor(this.dsty / this.backgroundCellHeight);
-	        console.log(bx, by);
+
 	        collisionHandlers["player"]["full_block"](this.sprite, this.scene.background.blocks["full"][bx][by]);
 	        if (this.oldKey == "left" && this.sprite.x <= this.dstx ||
 	            this.oldKey == "right" && this.sprite.x >= this.dstx ||
@@ -50,10 +55,11 @@ export class Player {
 	            this.bx = Math.floor(this.sprite.x / this.backgroundCellWidth);
 	            this.by = Math.floor(this.sprite.y / this.backgroundCellHeight);
 	            this.scene.background.blocks["full"][bx][by].setVisible(false);
+	            this.scene.background.levelMap[bx][by] = 0;
 
 	        }
 	    } 
-	    else if (this.scene.cursors['right'].isDown && this.bx < this.scene.background.blockWidth - 1)
+	    else if (this.scene.cursors['right'].isDown && this.bx < this.scene.background.blockWidth - 1 && this.scene.background.levelMap[this.bx + 1][this.by] != 2)
 	    {
 	        this.sprite.setVelocityY(0);
 	        this.sprite.setVelocityX(160);
@@ -61,7 +67,7 @@ export class Player {
 	        this.dsty = this.sprite.y;
 	        this.oldKey = "right";
 	    } 
-	    else if (this.scene.cursors['left'].isDown && this.bx > 0)
+	    else if (this.scene.cursors['left'].isDown && this.bx > 0 && this.scene.background.levelMap[this.bx - 1][this.by] != 2)
 	    {
 	        this.sprite.setVelocityY(0);
 	        this.sprite.setVelocityX(-160);
@@ -69,7 +75,7 @@ export class Player {
 	        this.dsty = this.sprite.y;
 	        this.oldKey = "left";
 	    } 
-	    else if (this.scene.cursors['up'].isDown && this.by > 0)
+	    else if (this.scene.cursors['up'].isDown && this.by > 0 && this.scene.background.levelMap[this.bx][this.by - 1] != 2)
 	    {
 	        this.sprite.setVelocityX(0);
 	        this.sprite.setVelocityY(-160);
@@ -77,7 +83,7 @@ export class Player {
 	        this.dsty = this.sprite.y - this.scene.background.blockTextureHeight;
 	        this.oldKey = "up";
 	    } else
-	    if (this.scene.cursors['down'].isDown && this.by < this.scene.background.blockHeight - 1)
+	    if (this.scene.cursors['down'].isDown && this.by < this.scene.background.blockHeight - 1 && this.scene.background.levelMap[this.bx][this.by + 1] != 2)
 	    {
 	        this.sprite.setVelocityX(0);
 	        this.sprite.setVelocityY(160);
