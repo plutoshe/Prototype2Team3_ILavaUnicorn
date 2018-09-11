@@ -35,18 +35,29 @@ function preload ()
 
 function create ()
 {
+    // console.log("!!!", this.game.config.width, this.scene.width);
     let backgroundConfig = {
         scene: this, 
         leftTopX: 0, 
         leftTopY: 0, 
-        width: 800, 
-        height: 600, 
-        blockWidth: 20, 
-        blockHeight: 15, 
-        blockTexture: ["empty", "full"], 
-        mapsStatus:  [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],
+        width: this.game.config.width, 
+        height: this.game.config.height, 
+        blockWidth: 10, 
+        blockHeight: 10, 
+        blockTexture: ["empty", "full", "rock"], 
+        levelMap:  [
+            [1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,1,1,1,1,1,1],
+            [1,1,1,1,1,1,1,1,1,1],
+            [1,1,1,1,1,1,1,1,1,1],
+            [1,1,1,1,1,1,1,1,1,1],
+            [1,1,1,1,1,1,1,1,1,1],
+            [1,1,1,1,1,1,1,1,1,1],
+            [1,1,1,1,1,1,1,1,1,1],
+            [1,1,1,1,1,1,1,1,1,1],
+            [1,1,1,1,1,1,1,1,1,1]],
+
     }
-    console.log(this.background);
     this.background.create(backgroundConfig);
 
     this.backgroundCellWidth = this.background.blockWidth;

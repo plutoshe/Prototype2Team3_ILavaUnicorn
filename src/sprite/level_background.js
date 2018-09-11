@@ -5,6 +5,12 @@ export class LevelBackground {
         var blocksArr = new2DArray(this.blockWidth, this.blockHeight);
         for (var i = 0; i < this.blockWidth; i++) {
             for (var j = 0; j < this.blockHeight; j++) {
+                
+                if (texture == "full" && this.texture[this.levelMap[i][j]] == "empty") {
+                    console.log(this.texture[this.levelMap[i][j]]);
+                    continue;
+                }
+
                 var block = blocks.create(this.leftTopX + i * this.blockTextureWidth, this.leftTopY + j * this.blockTextureHeight, texture);
 
                 block.setOrigin(0, 0);
@@ -16,6 +22,7 @@ export class LevelBackground {
                 block.setScale(this.blockTextureWidth / block.width, this.blockTextureHeight / block.height);
                 
                 block.moves = false;
+
                 blocksArr[i][j] = block;
 
             }
@@ -32,7 +39,7 @@ export class LevelBackground {
     // width, height : screen size
     // blockWidth, blockHeight: the size of block
     // blockTexture: block texture
-    // mapsStatus: current map status
+    // map: current map status
 
     create(config) {
         this.leftTopX = config.leftTopX;
@@ -44,7 +51,7 @@ export class LevelBackground {
         this.blockWidth = config.blockWidth;
         this.blockTextureHeight = config.height / config.blockHeight;
         this.blockTextureWidth = config.width / config.blockWidth;
-
+        this.levelMap = config.levelMap;
         
         this.blockGroups = {};
         this.blocks = {};
