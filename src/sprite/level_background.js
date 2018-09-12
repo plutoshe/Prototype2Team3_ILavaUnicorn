@@ -16,9 +16,12 @@ export class LevelBackground {
                 } 
                 
 
-                var block = blocks.create(this.leftTopX + i * this.blockTextureWidth, this.leftTopY + j * this.blockTextureHeight, texture);
+                var block = blocks.create(
+                    this.leftTopX + i * this.blockTextureWidth + this.blockTextureWidth / 2, 
+                    this.leftTopY + j * this.blockTextureHeight + this.blockTextureWidth / 2, 
+                    texture);
 
-                block.setOrigin(0, 0);
+                // block.setOrigin(0, 0);
                 block.minX = 0;
                 block.maxX = this.blockTextureWidth;
                 block.minY = 0;
@@ -35,7 +38,6 @@ export class LevelBackground {
 
             }
         }
-        // console.log("!", blocksArr[0][0]);
         return [blocks, blocksArr];
     }
 
@@ -47,8 +49,6 @@ export class LevelBackground {
             this.blocks["rock_static"][x][y].on(
                 'animationcomplete', 
                 function (animation, frame) {
-                    // console.log(current_block);
-                    console.log("~~~");
                     current_block.status = "falling";
                     current_block.setTexture("rock_static");
                     current_block.setVelocityY(160);
@@ -98,42 +98,44 @@ export class LevelBackground {
             this.blockGroups[this.texture[textureId]] = tmp[0];
             this.blocks[this.texture[textureId]] = tmp[1];
         }
-        // for (var i = 0; i < this.blockWidth; i++) {
-        //     for (var j = 0; j < this.blockHeight; j++) {
-        //         if (this.texture[this.levelMap[i][j]] == "rock_static") {
-        //             this.shaking_stone_complete[i][j] = this.createShakingFunction(this.blocks["rock_static"][i][j]);
-        //         }
-        //     }
-        // }
         this.stones = []
         for (var i = 0; i < this.blockWidth; i++) {
-            for (var j = 1; j < this.blockHeight; j++) {
-                if (this.texture[this.levelMap[i][j]] == "empty")
-                    this.checkStone(i, j - 1);
-            }
-        }
-        for (var i = 0; i < this.blockWidth; i++) {
             for (var j = 0; j < this.blockHeight; j++) {
-                if (this.texture[this.levelMap[i][j]] == "rock_static") {
-                     
+                if (this.texture[this.levelMap[i][j]] == "rock_static") {            
                     this.stones.push([this.blocks["rock_static"][i][j], i, j]);
                 }
             }
         }
     }
 
+    initialization() {
+        for (var i = 0; i < this.blockWidth; i++) {
+            for (var j = 1; j < this.blockHeight; j++) {
+                if (this.texture[this.levelMap[i][j]] == "empty")
+                    this.checkStone(i, j - 1);
+            }
+        }
+    }
+
     update() {
-        console.log(this.stones[1][0].y);
         for (var i in this.stones) {
             if (this.stones[i][0] && this.stones[i][0].status == "falling" ) {
-                var bx = Math.floor(this.stones[i][0].x / this.blockTextureWidth);
-                var by = Math.floor(this.stones[i][0].y / this.blockTextureHeight);
+                var stoneTopLeft = this.stones[i][0].getTopLeft();
+                var bx = Math.floor(stoneTopLeft.x / this.blockTextureWidth);
+                var by = Math.floor(stoneTopLeft.y / this.blockTextureHeight);
                 if (by > this.stones[i][2]) {
                     this.levelMap[this.stones[i][1]][this.stones[i][2]] = 1;
                 }   
                 if (by >= this.blockWidth - 1 || this.levelMap[bx][by] == 0 && this.levelMap[bx][by + 1] == 1) {
                     this.stones[i][0].setVelocityY(0);
                     this.stones[i][0].setTexture("rock_broken");
+                    var currentStone = this.stones[i][0];
+                    currentStone.on(
+                        "animationcomplete",
+                        function (animation, frame) {
+                            console.log("disableBody for rock");
+                            currentStone.disableBody(true, true);
+                        });
                     this.stones[i][0].anims.play("rock_broken");
                     this.stones[i][0].status = "broken";
                 }

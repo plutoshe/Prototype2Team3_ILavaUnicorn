@@ -1,6 +1,7 @@
-// var background = require("./background")
 import { LevelBackground } from "./sprite/level_background.js"
 import { Player } from "./sprite/player.js"
+import {collisionHandlers} from "./collisionHandlers.js"
+
 var config = {
     type: Phaser.AUTO,
     width: 320,
@@ -64,7 +65,7 @@ function create ()
 
 
 
-    // console.log("!!!", this.game.config.width, this.scene.width);
+    // background config
     let backgroundConfig = {
         scene: this, 
         leftTopX: 0, 
@@ -94,6 +95,9 @@ function create ()
 
     this.backgroundCellWidth = this.background.blockWidth;
     this.backgroundCellHeight = this.background.blockHeight;
+
+    // player config
+
     let playerConfig = {
         scene: this,
         x: 0,
@@ -103,15 +107,25 @@ function create ()
         backgroundCellHeight: this.background.blockTextureHeight,
     }
     this.player.create(playerConfig);    
-    // console.log(this.player.bx, this.player.by);
-    // console.log(this.background.blocks);
     this.background.blocks["full"][this.player.bx][this.player.by].destroy();
+
+    // key binding setting
     this.cursors = this.input.keyboard.addKeys({
         "up": Phaser.Input.Keyboard.KeyCodes.UP,
         "down": Phaser.Input.Keyboard.KeyCodes.DOWN,
         "left": Phaser.Input.Keyboard.KeyCodes.LEFT,
         "right": Phaser.Input.Keyboard.KeyCodes.RIGHT,
         "space": Phaser.Input.Keyboard.KeyCodes.SPACE});
+
+    // conllision setting
+    // console.log(collisionHandlers["collision"]["player"]["rock"]);
+    this.physics.add.overlap(
+        this.player.sprite,
+        this.background.blockGroups["rock_static"],
+        collisionHandlers["collision"]["player"]["rock"]);
+
+    // initialization
+    this.background.initialization();
 }
 
 

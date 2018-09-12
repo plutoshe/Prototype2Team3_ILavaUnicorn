@@ -18,17 +18,22 @@ export class Player {
 		this.scene = config.scene;
 		this.backgroundCellWidth = config.backgroundCellWidth;
     	this.backgroundCellHeight = config.backgroundCellHeight;
-    	console.log(config.x * this.backgroundCellWidth, 
-			config.y * this.backgroundCellHeight);
+    	console.log(config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
+			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
+			config.playerTexture);
+
 		this.sprite = this.scene.physics.add.sprite(
 			config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
 			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
 			config.playerTexture);
-		console.log(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
+		// console.log(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
+
 	    this.sprite.setScale(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
 	    this.sprite.setCollideWorldBounds(true);
-	    //this.sprite.x = this.trim(this.sprite.x, this.backgroundCellWidth);
-	    //this.sprite.y = this.trim(this.sprite.y, this.backgroundCellHeight);
+	    
+	    
+	    this.sprite.x = this.trim(this.sprite.x, this.backgroundCellWidth) + config.backgroundCellWidth / 2;
+	    this.sprite.y = this.trim(this.sprite.y, this.backgroundCellHeight) + config.backgroundCellHeight / 2;
 	    this.bx = Math.floor(this.sprite.x / this.backgroundCellWidth);
 	    this.by = Math.floor(this.sprite.y / this.backgroundCellHeight);
     	this.oldKey = "";
@@ -41,8 +46,7 @@ export class Player {
 	    if (this.oldKey != "") {
 	        var bx = Math.floor(this.dstx / this.backgroundCellWidth);
 	        var by = Math.floor(this.dsty / this.backgroundCellHeight);
-
-	        collisionHandlers["player"]["full_block"](this.sprite, this.scene.background.blocks["full"][bx][by]);
+	        collisionHandlers["overlap"]["player"]["full_block"](this.sprite, this.scene.background.blocks["full"][bx][by]);
 	        if (this.oldKey == "left" && this.sprite.x <= this.dstx ||
 	            this.oldKey == "right" && this.sprite.x >= this.dstx ||
 	            this.oldKey == "up" && this.sprite.y <= this.dsty ||
