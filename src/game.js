@@ -41,42 +41,29 @@ function preload ()
 }
 
 
-function rockShakingDone(animation, frame) {
-    console.log("done");
-}
 
 function create ()
 {
     this.anims.create({
         key: 'rock_shaking',
         // frames: [ { key: 'rock_shaking'} ],
-        frames: this.anims.generateFrameNumbers('rock_shaking', { start: 0, end: 6 }),
+        frames: this.anims.generateFrameNumbers('rock_shaking'),
         frameRate: 10,
         repeat: 1,
         // OnComplete: this.background.rockShakingDone,
     });
 
-    this.anims.on("animationcomplete", rockShakingDone, this);
-
     this.anims.create({
-        key: 'left',
-        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+        key: 'rock_broken',
+        // frames: [ { key: 'rock_shaking'} ],
+        frames: this.anims.generateFrameNumbers('rock_broken'),
         frameRate: 10,
-        repeat: 2
+        hideOnComplete: true,
+        // OnComplete: this.background.rockShakingDone,
     });
 
-    this.anims.create({
-        key: 'turn',
-        frames: [ { key: 'dude', frame: 4 } ],
-        frameRate: 20
-    });
 
-    this.anims.create({
-        key: 'right',
-        frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-        frameRate: 10,
-        repeat: -1
-    });
+
     // console.log("!!!", this.game.config.width, this.scene.width);
     let backgroundConfig = {
         scene: this, 
@@ -116,8 +103,8 @@ function create ()
         backgroundCellHeight: this.background.blockTextureHeight,
     }
     this.player.create(playerConfig);    
-    console.log(this.player.bx, this.player.by);
-    console.log(this.background.blocks);
+    // console.log(this.player.bx, this.player.by);
+    // console.log(this.background.blocks);
     this.background.blocks["full"][this.player.bx][this.player.by].destroy();
     this.cursors = this.input.keyboard.addKeys({
         "up": Phaser.Input.Keyboard.KeyCodes.UP,
@@ -129,6 +116,7 @@ function create ()
 
 
 function update (){
+    this.background.update();
     this.player.update();
 }
 

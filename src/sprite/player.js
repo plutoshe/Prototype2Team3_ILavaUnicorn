@@ -55,7 +55,7 @@ export class Player {
 	            this.bx = Math.floor(this.sprite.x / this.backgroundCellWidth);
 	            this.by = Math.floor(this.sprite.y / this.backgroundCellHeight);
 	            this.scene.background.blocks["full"][bx][by].setVisible(false);
-	            this.scene.background.levelMap[bx][by] = 0;
+	            this.scene.background.setlevelMap(bx, by, 0);
 
 	        }
 	    } 
