@@ -25,7 +25,8 @@ var levelgame = new Phaser.Game(config);
 function preload ()
 {
     this.load.image('star', 'assets/star.png');
-    this.load.image('full', 'assets/full.png');
+    this.load.image('full_default', 'assets/full.png');
+    this.load.image('full_special_orange', 'assets/full_1.png');
     this.load.image('empty', 'assets/empty.png');
     this.load.image("rock_static", "assets/rock_static.png")
     this.load.spritesheet('rock_shaking', 'assets/rock_shaking.png', { frameWidth: 64, frameHeight: 64 });
@@ -65,6 +66,47 @@ function create ()
 
 
 
+    let blockTexture = {
+        0 : {
+            group: "empty",
+            texture: "empty",
+            createFunction: function(v) {
+                return true;
+            }
+        },
+        1 : {
+            group: "full",
+            texture: "full_default",
+            createFunction: function(v) {
+                if (v.group == "rock" || v.group == "full") {
+                    if (v.group == "full" && v.texture != "full_default") {
+                        return false;
+                    }
+                    return true;
+                }
+                else return false;
+            }
+        },
+        2 : {
+            group: "rock",
+            texture: "rock_static",
+            createFunction: function(v) {
+                if (v.group == "rock") 
+                    return true;
+                else return false;
+            }
+        },
+        3 : {
+            group: "full",
+            texture: "full_special_orange",
+            createFunction: function(v) {
+                if (v.texture == "full_special_orange") 
+                    return true;
+                else return false;
+            }
+        }
+    }
+
     // background config
     let backgroundConfig = {
         scene: this, 
@@ -74,12 +116,12 @@ function create ()
         height: this.game.config.height, 
         blockWidth: 10, 
         blockHeight: 10, 
-        blockTexture: ["empty", "full", "rock_static"], 
+        blockTexture: blockTexture, 
         levelMap:  [
             [1,1,1,1,1,1,1,1,1,1],
             [1,0,0,0,0,0,0,1,1,1],
             [1,1,1,1,1,1,1,1,1,1],
-            [1,1,2,1,1,1,1,1,1,1],
+            [1,1,2,1,1,1,1,3,1,1],
             [1,1,0,2,1,2,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,1,1,1,1,1],
@@ -121,7 +163,7 @@ function create ()
     // console.log(collisionHandlers["collision"]["player"]["rock"]);
     this.physics.add.overlap(
         this.player.sprite,
-        this.background.blockGroups["rock_static"],
+        this.background.blockGroups["rock"],
         collisionHandlers["collision"]["player"]["rock"]);
 
     // initialization

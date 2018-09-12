@@ -5,6 +5,7 @@ var collisionHandlers = {
         	"full_block": 
 				function overlapForBlock(player, block)
 				{
+					if (!block) return;
 				    let blockTopLeft = block.getTopLeft();
 				    let playerTopLeft = player.getTopLeft();
 				    let playerBottomRight = player.getBottomRight();

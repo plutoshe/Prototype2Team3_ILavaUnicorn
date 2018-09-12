@@ -4,35 +4,34 @@ import { new2DArray } from "../helper/helper.js"
 export class LevelBackground {
 
 
-    addTextureGroup(texture) {
-        var blocks = this.scene.physics.add.group();
-        var blocksArr = new2DArray(this.blockWidth, this.blockHeight);
+    addTextureGroup(blockTexture) {
+        // console.log(texture);
+        var blocks;
+        var blocksArr;
+        if (blockTexture.group in this.blockGroups) {
+            blocks = this.blockGroups[blockTexture.group];
+            blocksArr = this.blocks[blockTexture.group];
+        } else {
+            blocks = this.scene.physics.add.group();
+            blocksArr = new2DArray(this.blockWidth, this.blockHeight);
+        }
+        
         for (var i = 0; i < this.blockWidth; i++) {
-            for (var j = 0; j < this.blockHeight; j++) {
-                
-                
-                if (texture == "rock_static" && this.texture[this.levelMap[i][j]] != "rock_static") {                 
+            for (var j = 0; j < this.blockHeight; j++) {    
+                if (!blockTexture.createFunction(this.texture[[this.levelMap[i][j]]])) {                 
                     continue;
                 } 
-                
-
+            
                 var block = blocks.create(
                     this.leftTopX + i * this.blockTextureWidth + this.blockTextureWidth / 2, 
                     this.leftTopY + j * this.blockTextureHeight + this.blockTextureWidth / 2, 
-                    texture);
-
-                // block.setOrigin(0, 0);
+                    blockTexture.texture);
                 block.minX = 0;
                 block.maxX = this.blockTextureWidth;
                 block.minY = 0;
                 block.maxY = this.blockTextureHeight;
-                // block.setScale(heightRatio, widthRatio);
                 block.setScale(this.blockTextureWidth / block.width, this.blockTextureHeight / block.height);
-                
                 block.moves = false;
-                if (texture == "full" && this.texture[this.levelMap[i][j]] == "empty") {
-                    block.setVisible(false);
-                }
                 blocksArr[i][j] = block;
                 
 
@@ -43,10 +42,10 @@ export class LevelBackground {
 
     checkStone(x, y) {
         if (this.levelMap[x][y] == 2) {
-            this.blocks["rock_static"][x][y].setTexture('rock_shaking');
-            this.blocks["rock_static"][x][y].anims.play("rock_shaking");
-            var current_block = this.blocks["rock_static"][x][y];
-            this.blocks["rock_static"][x][y].on(
+            this.blocks["rock"][x][y].setTexture('rock_shaking');
+            this.blocks["rock"][x][y].anims.play("rock_shaking");
+            var current_block = this.blocks["rock"][x][y];
+            this.blocks["rock"][x][y].on(
                 'animationcomplete', 
                 function (animation, frame) {
                     current_block.status = "falling";
@@ -95,14 +94,16 @@ export class LevelBackground {
         this.shaking_stone_complete = new2DArray(this.blockWidth, this.blockHeight);
         for (var textureId in this.texture){
             var tmp = this.addTextureGroup(this.texture[textureId]);
-            this.blockGroups[this.texture[textureId]] = tmp[0];
-            this.blocks[this.texture[textureId]] = tmp[1];
+            this.blockGroups[this.texture[textureId].group] = tmp[0];
+            this.blocks[this.texture[textureId].group] = tmp[1];
+            console.log(this.blocks);
         }
+        console.log(this.blockGroups, this.blocks);
         this.stones = []
         for (var i = 0; i < this.blockWidth; i++) {
             for (var j = 0; j < this.blockHeight; j++) {
-                if (this.texture[this.levelMap[i][j]] == "rock_static") {            
-                    this.stones.push([this.blocks["rock_static"][i][j], i, j]);
+                if (this.texture[this.levelMap[i][j]].group == "rock") {            
+                    this.stones.push([this.blocks["rock"][i][j], i, j]);
                 }
             }
         }
@@ -111,7 +112,7 @@ export class LevelBackground {
     initialization() {
         for (var i = 0; i < this.blockWidth; i++) {
             for (var j = 1; j < this.blockHeight; j++) {
-                if (this.texture[this.levelMap[i][j]] == "empty")
+                if (this.texture[this.levelMap[i][j]].group == "empty")
                     this.checkStone(i, j - 1);
             }
         }
