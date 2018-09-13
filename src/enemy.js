@@ -2,6 +2,8 @@ import {collisionHandlers} from "./collisionHandlers.js"
 import { collide } from "./helper/helper.js";
 //import EasyStar from "./helper/easystar-0.4.3.js"
 
+
+// TODO: disable AI if off-screen
 export class Enemy {     
 
     trim(pos, divider) {
@@ -37,7 +39,8 @@ export class Enemy {
 	    this.sprite.y = this.trim(this.sprite.y, this.backgroundCellHeight) + config.backgroundCellHeight / 2;
 	    this.bx = Math.floor(this.sprite.x / this.backgroundCellWidth);
         this.by = Math.floor(this.sprite.y / this.backgroundCellHeight);
-        this.oldKey = "";
+		this.oldKey = "";
+		this.speed = config.speed;
     }
 
     update()
@@ -77,7 +80,7 @@ export class Enemy {
 				else
 				{
 					this.sprite.setVelocityY(0);
-					this.sprite.setVelocityX(160);
+					this.sprite.setVelocityX(this.speed);
 					this.dstx = this.sprite.x + this.backgroundCellWidth;
 					this.dsty = this.sprite.y;
 					this.oldKey = "right";
@@ -95,7 +98,7 @@ export class Enemy {
 				else
 				{
 					this.sprite.setVelocityY(0);
-					this.sprite.setVelocityX(-160);
+					this.sprite.setVelocityX(-this.speed);
 					this.dstx = this.sprite.x - this.backgroundCellWidth;
 					this.dsty = this.sprite.y;
 					this.oldKey = "left";
@@ -113,7 +116,7 @@ export class Enemy {
 				else
 				{
 					this.sprite.setVelocityX(0);
-					this.sprite.setVelocityY(-160);
+					this.sprite.setVelocityY(-this.speed);
 					this.dstx = this.sprite.x;
 					this.dsty = this.sprite.y - this.scene.background.blockTextureHeight;
 					this.oldKey = "up";
@@ -131,7 +134,7 @@ export class Enemy {
 				else
 				{
 					this.sprite.setVelocityX(0);
-					this.sprite.setVelocityY(160);
+					this.sprite.setVelocityY(this.speed);
 					this.dstx = this.sprite.x;
 					this.dsty = this.sprite.y + this.scene.background.blockTextureHeight;
 					this.oldKey = "down";
