@@ -120,6 +120,7 @@ function create ()
         playerTexture: 'star',
         backgroundCellWidth: this.background.blockTextureWidth,
         backgroundCellHeight: this.background.blockTextureHeight,
+        speed: 50
     }
     this.enemy.create(enemyConfig);   
 
