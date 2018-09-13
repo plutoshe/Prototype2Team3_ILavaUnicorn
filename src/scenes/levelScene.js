@@ -95,7 +95,7 @@ let playerConfig = {
     x: 0,
     y: 17,
     playerTexture: 'star',
-    
+    cameraBoundry: 2,
 }
 
 function preload ()
@@ -196,6 +196,8 @@ function create ()
 
     // initialization
     this.background.initialization();
+    
+    this.player.initialization();    
 }
 
 

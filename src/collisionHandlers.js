@@ -20,8 +20,8 @@ var collisionHandlers = {
 				            block.maxX = playerTopLeft.x - blockTopLeft.x;
 				        }
 				    }
-				    
-				    if (playerTopLeft.x == blockTopLeft.x) {
+				   
+ 				    if (playerTopLeft.x == blockTopLeft.x) {
 				        if (playerBottomRight.y - blockTopLeft.y <= block.height && 
 				            playerBottomRight.y - blockTopLeft.y >= block.minY) {
 				            block.minY = playerBottomRight.y - blockTopLeft.y;
@@ -40,22 +40,17 @@ var collisionHandlers = {
 				},
 			"camera":
 				function beyondCamearaLimit(playerClass, camera) {
-					console.log(playerClass.dsty, camera.y, playerClass.scene.height);
-					console.log(camera);
-					console.log(playerClass.dsty + playerClass.backgroundCellHeight / 2, 
-						camera.midPoint.y + camera.height / 2)
-					console.log(playerClass.dsty - playerClass.backgroundCellHeight / 2,
-						camera.midPoint.y - camera.height / 2);
-					if (playerClass.dsty + playerClass.backgroundCellHeight / 2 >
-					 	camera.midPoint.y + camera.height / 2)
-						camera.pan(
-							camera.midPoint.x, 
-							camera.midPoint.y + playerClass.backgroundCellHeight, 50);
-					if (playerClass.dsty - playerClass.backgroundCellHeight / 2 < 
-						camera.midPoint.y - camera.height / 2)
-						camera.pan(
-							camera.midPoint.x, 
-							camera.midPoint.y - playerClass.backgroundCellHeight, 50);
+					var my = camera.midPoint.y;
+					while (playerClass.dsty + playerClass.backgroundCellHeight / 2 >
+					 	my + camera.height / 2 - 
+					 	playerClass.cameraBoundry * playerClass.backgroundCellHeight) {
+						my += playerClass.backgroundCellHeight;
+					}
+					while (playerClass.dsty - playerClass.backgroundCellHeight / 2 < 
+						my - camera.height / 2 + 
+						playerClass.cameraBoundry * playerClass.backgroundCellHeight)
+						my -=  playerClass.backgroundCellHeight;
+					camera.pan(camera.midPoint.x, my, 50);
 				},
 		},
 		

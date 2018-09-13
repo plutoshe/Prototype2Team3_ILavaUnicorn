@@ -18,6 +18,7 @@ export class Player {
 		this.scene = config.scene;
 		this.backgroundCellWidth = config.backgroundCellWidth;
     	this.backgroundCellHeight = config.backgroundCellHeight;
+    	this.cameraBoundry = config.cameraBoundry;
     	console.log(config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
 			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
 			config.playerTexture);
@@ -37,6 +38,11 @@ export class Player {
 	    this.bx = Math.floor(this.sprite.x / this.backgroundCellWidth);
 	    this.by = Math.floor(this.sprite.y / this.backgroundCellHeight);
     	this.oldKey = "";
+	}
+
+	initialization() {
+		this.dsty = this.sprite.y;
+		collisionHandlers["overlap"]["player"]["camera"](this, this.scene.cameras.main);
 	}
     
 	update() {
