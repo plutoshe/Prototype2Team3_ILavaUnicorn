@@ -14,6 +14,90 @@ export var levelScene = new Phaser.Class({
     update: update,
 });
 
+let blockTexture = {
+    0 : {
+        group: "empty",
+        texture: "empty",
+        createFunction: function(v) {
+            return true;
+        }
+    },
+    1 : {
+        group: "full",
+        texture: "full_default",
+        createFunction: function(v) {
+            if (v.group == "rock" || v.group == "full") {
+                if (v.group == "full" && v.texture != "full_default") {
+                    return false;
+                }
+                return true;
+            }
+            else return false;
+        }
+    },
+    2 : {
+        group: "rock",
+        texture: "rock_static",
+        createFunction: function(v) {
+            if (v.group == "rock") 
+                return true;
+            else return false;
+        }
+    },
+    3 : {
+        group: "full",
+        texture: "full_special_orange",
+        createFunction: function(v) {
+            if (v.texture == "full_special_orange") 
+                return true;
+            else return false;
+        }
+    }
+}
+
+
+let backgroundConfig = { 
+    leftTopX: 0, 
+    leftTopY: 0,  
+    displayBlockWidth: 14, 
+    displayBlockHeight: 18, 
+    blockWidth: 14,
+    blockHeight: 24,
+    levelMap:  [
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,0,0,0,0,0,0,1,1,1,0,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
+        [1,1,2,1,1,1,1,3,1,1,0,1,1,1],
+        [1,1,0,2,1,2,1,1,1,1,0,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
+        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
+        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
+        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
+        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,0,1,1,1]],
+
+}
+
+let playerConfig = {
+    x: 0,
+    y: 17,
+    playerTexture: 'star',
+    
+}
+
 function preload ()
 {
     this.load.image('star', 'assets/star.png');
@@ -23,12 +107,6 @@ function preload ()
     this.load.image("rock_static", "assets/rock_static.png")
     this.load.spritesheet('rock_shaking', 'assets/rock_shaking.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('rock_broken', 'assets/rock_broken.png', { frameWidth: 64, frameHeight: 64 });
-    this.load.spritesheet('dude', 
-        'assets/dude.png',
-        { frameWidth: 32, frameHeight: 48 }
-    );
-    // this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-    // 
 
     this.background = new LevelBackground();
     this.player = new Player();
@@ -39,6 +117,7 @@ function preload ()
 
 function create ()
 {
+    console.log(this.physics)
     this.anims.create({
         key: 'rock_shaking',
         // frames: [ { key: 'rock_shaking'} ],
@@ -56,73 +135,18 @@ function create ()
         hideOnComplete: true,
         // OnComplete: this.background.rockShakingDone,
     });
-
-
-
-    let blockTexture = {
-        0 : {
-            group: "empty",
-            texture: "empty",
-            createFunction: function(v) {
-                return true;
-            }
-        },
-        1 : {
-            group: "full",
-            texture: "full_default",
-            createFunction: function(v) {
-                if (v.group == "rock" || v.group == "full") {
-                    if (v.group == "full" && v.texture != "full_default") {
-                        return false;
-                    }
-                    return true;
-                }
-                else return false;
-            }
-        },
-        2 : {
-            group: "rock",
-            texture: "rock_static",
-            createFunction: function(v) {
-                if (v.group == "rock") 
-                    return true;
-                else return false;
-            }
-        },
-        3 : {
-            group: "full",
-            texture: "full_special_orange",
-            createFunction: function(v) {
-                if (v.texture == "full_special_orange") 
-                    return true;
-                else return false;
-            }
-        }
-    }
-
+    console.log("!:", this.game.config.height);
+    this.cameras.main.setBounds(
+        0,
+        0, 
+        this.game.config.width,
+        this.game.config.height / backgroundConfig.displayBlockHeight * backgroundConfig.blockHeight);
     // background config
-    let backgroundConfig = {
-        scene: this, 
-        leftTopX: 0, 
-        leftTopY: 0, 
-        width: this.game.config.width, 
-        height: this.game.config.height, 
-        blockWidth: 10, 
-        blockHeight: 10, 
-        blockTexture: blockTexture, 
-        levelMap:  [
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,0,0,0,0,0,0,1,1,1],
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,1,2,1,1,1,1,3,1,1],
-            [1,1,0,2,1,2,1,1,1,1],
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,1,1,1,1,1,1,0,0,0],
-            [1,1,1,1,1,1,1,0,0,0],
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,1,1,1,1,1,1,1,1,1]],
-
-    }
+    backgroundConfig.width = this.game.config.width, 
+    backgroundConfig.height = this.game.config.height,
+    backgroundConfig.blockTexture = blockTexture;
+    backgroundConfig.scene = this;
+    
 
     backgroundConfig.levelMap = backgroundConfig.levelMap[0].map(
         (col, i) => backgroundConfig.levelMap.map(row => row[i]));
@@ -132,15 +156,9 @@ function create ()
     this.backgroundCellHeight = this.background.blockHeight;
 
     // player config
-
-    let playerConfig = {
-        scene: this,
-        x: 0,
-        y: 1,
-        playerTexture: 'star',
-        backgroundCellWidth: this.background.blockTextureWidth,
-        backgroundCellHeight: this.background.blockTextureHeight,
-    }
+    playerConfig.backgroundCellWidth = this.background.blockTextureWidth;
+    playerConfig.backgroundCellHeight = this.background.blockTextureHeight;
+    playerConfig.scene = this;
     this.player.create(playerConfig);    
     this.background.blocks["full"][this.player.bx][this.player.by].destroy();
 

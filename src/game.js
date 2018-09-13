@@ -3,8 +3,8 @@ import {levelScene} from "./scenes/levelScene.js"
 
 var config = {
     type: Phaser.AUTO,
-    width: 320,
-    height: 320,
+    width: 560,
+    height: 720,
     title: "ABC",
     physics: {
         default: 'arcade',

@@ -84,14 +84,17 @@ export class LevelBackground {
         this.texture = config.blockTexture;
         this.blockHeight = config.blockHeight;
         this.blockWidth = config.blockWidth;
-        this.blockTextureHeight = config.height / config.blockHeight;
-        this.blockTextureWidth = config.width / config.blockWidth;
+        this.displayBlockWidth = config.displayBlockWidth
+        this.displayBlockHeight = config.displayBlockHeight
+        this.blockTextureHeight = config.height / config.displayBlockHeight;
+        this.blockTextureWidth = config.width / config.displayBlockWidth;
         this.levelMap = config.levelMap;
         
         this.blockGroups = {};
         this.blocks = {};
         this.scene = config.scene;
-        this.shaking_stone_complete = new2DArray(this.blockWidth, this.blockHeight);
+        console.log(this.scene.physics);
+
         for (var textureId in this.texture){
             var tmp = this.addTextureGroup(this.texture[textureId]);
             this.blockGroups[this.texture[textureId].group] = tmp[0];

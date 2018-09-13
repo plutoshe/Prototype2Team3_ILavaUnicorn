@@ -37,7 +37,26 @@ var collisionHandlers = {
 				        (block.maxX - block.minX) / block.scaleX, 
 				        (block.maxY - block.minY) / block.scaleY);
 				    
-				}
+				},
+			"camera":
+				function beyondCamearaLimit(playerClass, camera) {
+					console.log(playerClass.dsty, camera.y, playerClass.scene.height);
+					console.log(camera);
+					console.log(playerClass.dsty + playerClass.backgroundCellHeight / 2, 
+						camera.midPoint.y + camera.height / 2)
+					console.log(playerClass.dsty - playerClass.backgroundCellHeight / 2,
+						camera.midPoint.y - camera.height / 2);
+					if (playerClass.dsty + playerClass.backgroundCellHeight / 2 >
+					 	camera.midPoint.y + camera.height / 2)
+						camera.pan(
+							camera.midPoint.x, 
+							camera.midPoint.y + playerClass.backgroundCellHeight, 50);
+					if (playerClass.dsty - playerClass.backgroundCellHeight / 2 < 
+						camera.midPoint.y - camera.height / 2)
+						camera.pan(
+							camera.midPoint.x, 
+							camera.midPoint.y - playerClass.backgroundCellHeight, 50);
+				},
 		},
 		
 		"enemy": {

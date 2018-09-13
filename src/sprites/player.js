@@ -29,7 +29,7 @@ export class Player {
 		// console.log(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
 
 	    this.sprite.setScale(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
-	    this.sprite.setCollideWorldBounds(true);
+	    // this.sprite.setCollideWorldBounds(true);
 	    
 	    
 	    this.sprite.x = this.trim(this.sprite.x, this.backgroundCellWidth) + config.backgroundCellWidth / 2;
@@ -47,6 +47,7 @@ export class Player {
 	        var bx = Math.floor(this.dstx / this.backgroundCellWidth);
 	        var by = Math.floor(this.dsty / this.backgroundCellHeight);
 	        collisionHandlers["overlap"]["player"]["full_block"](this.sprite, this.scene.background.blocks["full"][bx][by]);
+	        collisionHandlers["overlap"]["player"]["camera"](this, this.scene.cameras.main);
 	        if (this.oldKey == "left" && this.sprite.x <= this.dstx ||
 	            this.oldKey == "right" && this.sprite.x >= this.dstx ||
 	            this.oldKey == "up" && this.sprite.y <= this.dsty ||
