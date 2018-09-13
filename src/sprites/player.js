@@ -19,10 +19,7 @@ export class Player {
 		this.backgroundCellWidth = config.backgroundCellWidth;
     	this.backgroundCellHeight = config.backgroundCellHeight;
     	this.cameraBoundry = config.cameraBoundry;
-    	console.log(config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
-			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
-			config.playerTexture);
-
+    	
 		this.sprite = this.scene.physics.add.sprite(
 			config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
 			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 

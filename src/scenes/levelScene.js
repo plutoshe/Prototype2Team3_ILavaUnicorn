@@ -14,7 +14,7 @@ export var levelScene = new Phaser.Class({
     update: update,
 });
 
-let blockTexture = {
+let blockTextures = {
     0 : {
         group: "empty",
         texture: "empty",
@@ -35,15 +35,6 @@ let blockTexture = {
             else return false;
         }
     },
-    2 : {
-        group: "rock",
-        texture: "rock_static",
-        createFunction: function(v) {
-            if (v.group == "rock") 
-                return true;
-            else return false;
-        }
-    },
     3 : {
         group: "full",
         texture: "full_special_orange",
@@ -53,6 +44,17 @@ let blockTexture = {
             else return false;
         }
     }
+}
+
+let entityTextures = {
+    2 : {
+        group: "rock",
+        texture: "rock_static",
+        isOK: function(v) {
+            return (v.group == "full");
+        },
+        pos: [[2, 2], [3, 2], [2, 3]],
+    },
 }
 
 
@@ -66,9 +68,9 @@ let backgroundConfig = {
     levelMap:  [
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [1,0,0,0,0,0,0,1,1,1,0,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-        [1,1,2,1,1,1,1,3,1,1,0,1,1,1],
-        [1,1,0,2,1,2,1,1,1,1,0,1,1,1],
+        [1,1,3,3,1,1,1,1,1,1,0,1,1,1],
+        [1,1,1,1,1,1,1,3,1,1,0,1,1,1],
+        [1,1,0,1,1,1,1,1,1,1,0,1,1,1],
         [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
         [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
         [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
@@ -117,7 +119,6 @@ function preload ()
 
 function create ()
 {
-    console.log(this.physics)
     this.anims.create({
         key: 'rock_shaking',
         // frames: [ { key: 'rock_shaking'} ],
@@ -135,7 +136,6 @@ function create ()
         hideOnComplete: true,
         // OnComplete: this.background.rockShakingDone,
     });
-    console.log("!:", this.game.config.height);
     this.cameras.main.setBounds(
         0,
         0, 
@@ -144,7 +144,8 @@ function create ()
     // background config
     backgroundConfig.width = this.game.config.width, 
     backgroundConfig.height = this.game.config.height,
-    backgroundConfig.blockTexture = blockTexture;
+    backgroundConfig.blockTextures = blockTextures;
+    backgroundConfig.entityTextures = entityTextures;
     backgroundConfig.scene = this;
     
 
@@ -152,18 +153,19 @@ function create ()
         (col, i) => backgroundConfig.levelMap.map(row => row[i]));
     this.background.create(backgroundConfig);
 
-    this.backgroundCellWidth = this.background.blockWidth;
-    this.backgroundCellHeight = this.background.blockHeight;
-
+    this.backgroundCellWidth = this.background.blockTextureWidth;
+    this.backgroundCellHeight = this.background.blockTextureHeight;
     // player config
     playerConfig.backgroundCellWidth = this.background.blockTextureWidth;
     playerConfig.backgroundCellHeight = this.background.blockTextureHeight;
+
     playerConfig.scene = this;
     this.player.create(playerConfig);    
-    this.background.blocks["full"][this.player.bx][this.player.by].destroy();
+    if (this.background.blocks["full"][this.player.bx][this.player.by])
+        this.background.blocks["full"][this.player.bx][this.player.by].destroy();
 
     // enemy config
-    let enemyConfig = {
+     let enemyConfig = {
         scene: this,
         x: 9,
         y: 7,
@@ -171,7 +173,7 @@ function create ()
         backgroundCellWidth: this.background.blockTextureWidth,
         backgroundCellHeight: this.background.blockTextureHeight,
         speed: 50
-    }
+    }   
     this.enemy.create(enemyConfig);  
 
     // key binding setting
