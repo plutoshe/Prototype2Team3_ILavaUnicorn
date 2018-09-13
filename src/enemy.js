@@ -66,50 +66,25 @@ export class Enemy {
 	    } 
 		else 
 		{
+			moveComplete = this.move(this.oldKey);
 			while(!moveComplete)
 			{
-			if (movementDirection == "right" && this.bx < this.scene.background.blockWidth - 1)
-			{
-				if(this.scene.background.levelMap[this.bx + 1][this.by] != 0)
+				moveComplete = this.move(move_list[i]);
+				i = i + 1;
+			}
+		}
+	}
+	
+	move(direction)
+	{
+		var moveComplete;
+		switch(direction)
+		{
+			case "up":
+				if( this.scene.background.levelMap[this.bx][this.by - 1] != 0 
+				||  this.by <= 0)
 				{
-					i = i + 1;
-					movementDirection = move_list[i];
-				}
-				else
-				{
-					this.sprite.setVelocityY(0);
-					this.sprite.setVelocityX(this.speed);
-					this.dstx = this.sprite.x + this.backgroundCellWidth;
-					this.dsty = this.sprite.y;
-					this.oldKey = "right";
-					moveComplete = true;
-					break;
-				}
-			} 
-			if (movementDirection == "left" && this.bx > 0)
-			{
-				if( this.scene.background.levelMap[this.bx - 1][this.by] != 0 )
-				{
-					i = i + 1;
-					movementDirection = move_list[i];
-				}
-				else
-				{
-					this.sprite.setVelocityY(0);
-					this.sprite.setVelocityX(-this.speed);
-					this.dstx = this.sprite.x - this.backgroundCellWidth;
-					this.dsty = this.sprite.y;
-					this.oldKey = "left";
-					moveComplete = true;
-					break;
-				}
-			} 
-			if (movementDirection == "up" && this.by > 0 )
-			{
-				if( this.scene.background.levelMap[this.bx][this.by - 1] != 0 )
-				{
-					i = i + 1;
-					movementDirection = move_list[i];
+					moveComplete = false;
 				}
 				else
 				{
@@ -119,15 +94,13 @@ export class Enemy {
 					this.dsty = this.sprite.y - this.scene.background.blockTextureHeight;
 					this.oldKey = "up";
 					moveComplete = true;
-					break;
 				}
-			}
-			if (movementDirection == "down" && this.by < this.scene.background.blockHeight - 1 )
-			{
-				if( this.scene.background.levelMap[this.bx][this.by + 1] != 0 )
+				break;
+			case "down":
+				if( this.scene.background.levelMap[this.bx][this.by + 1] != 0 
+				||  this.by >= this.scene.background.blockHeight - 1)
 				{
-					i = i + 1;
-					movementDirection = move_list[i];
+					moveComplete = false;
 				}
 				else
 				{
@@ -137,12 +110,45 @@ export class Enemy {
 					this.dsty = this.sprite.y + this.scene.background.blockTextureHeight;
 					this.oldKey = "down";
 					moveComplete = true;
-					break;
 				}
-			}
+				break;
+			case "left":
+				if( this.scene.background.levelMap[this.bx - 1][this.by] != 0 
+				||  this.bx <= 0 )
+				{
+					moveComplete = false;
+				}
+				else
+				{
+					this.sprite.setVelocityY(0);
+					this.sprite.setVelocityX(-this.speed);
+					this.dstx = this.sprite.x - this.backgroundCellWidth;
+					this.dsty = this.sprite.y;
+					this.oldKey = "left";
+					moveComplete = true;
+				}
+				break;
+			case "right":
+				if( this.scene.background.levelMap[this.bx + 1][this.by] != 0
+				||  this.bx >= this.scene.background.blockWidth - 1 )
+				{
+					moveComplete = false;
+				}
+				else
+				{
+					this.sprite.setVelocityY(0);
+					this.sprite.setVelocityX(this.speed);
+					this.dstx = this.sprite.x + this.backgroundCellWidth;
+					this.dsty = this.sprite.y;
+					this.oldKey = "right";
+					moveComplete = true;
+				}
+				break;
+			default:
+				moveComplete = false;
 		}
-		}
-    }
+		return moveComplete;
+	}
 
     checkBackgroundCollision()
     {
@@ -239,6 +245,9 @@ export class Enemy {
 			}
 
 		}
+		var random_prob = 0.2;
+		if(Math.random() < random_prob)
+			shuffle(move_list);
 		return move_list;
     }
 
@@ -252,3 +261,21 @@ export class Enemy {
         
     }
 }
+function shuffle(array) {
+	var currentIndex = array.length, temporaryValue, randomIndex;
+  
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+  
+	  // Pick a remaining element...
+	  randomIndex = Math.floor(Math.random() * currentIndex);
+	  currentIndex -= 1;
+  
+	  // And swap it with the current element.
+	  temporaryValue = array[currentIndex];
+	  array[currentIndex] = array[randomIndex];
+	  array[randomIndex] = temporaryValue;
+	}
+  
+	return array;
+  }
