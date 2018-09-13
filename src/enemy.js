@@ -66,10 +66,9 @@ export class Enemy {
 	    } 
 		else 
 		{
-			console.log(move_list);
+			moveComplete = this.move(this.oldKey);
 			while(!moveComplete)
 			{
-				console.log(move_list[i]);
 				moveComplete = this.move(move_list[i]);
 				i = i + 1;
 			}
