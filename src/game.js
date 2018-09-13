@@ -138,6 +138,10 @@ function create ()
         this.background.blockGroups["rock_static"],
         collisionHandlers["collision"]["player"]["rock"]);
 
+    this.physics.add.overlap(
+        this.enemy.sprite,
+        this.background.blockGroups["rock_static"],
+        collisionHandlers["collision"]["enemy"]["rock"]);
     // initialization
     this.background.initialization();
 }
