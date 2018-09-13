@@ -41,7 +41,7 @@ export class Enemy {
 
     update()
     {
-        /*var movementDirection = "left";
+        var movementDirection = "left";
         if (this.oldKey != "") {
 	        var bx = Math.floor(this.dstx / this.backgroundCellWidth);
 	        var by = Math.floor(this.dsty / this.backgroundCellHeight);
@@ -95,7 +95,7 @@ export class Enemy {
 	    } else {
 	        this.sprite.setVelocityX(0);
 	        this.sprite.setVelocityY(0);
-	    }*/
+	    }
     }
 
     checkBackgroundCollision()
