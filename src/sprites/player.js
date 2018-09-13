@@ -59,7 +59,7 @@ export class Player {
 	            this.sprite.y = this.dsty;         
 	            this.bx = Math.floor(this.sprite.x / this.backgroundCellWidth);
 				this.by = Math.floor(this.sprite.y / this.backgroundCellHeight);
-				if (!this.scene.background.blocks["full"][bx][by]) 
+				if ( this.scene.background.blocks["full"][bx][by] != null) 
 	            	this.scene.background.blocks["full"][bx][by].setVisible(false);
 	            this.scene.background.setlevelMap(bx, by, 0);
 
