@@ -49,6 +49,17 @@ var collisionHandlers = {
 	    			}
     			}
     	},
+	},
+	
+	"collision": {
+    	"enemy": {
+    		"full_block": 
+    			function (enemy, block) {
+    				if (block == "falling") {
+	    				player.disableBody(true, true);
+	    			}
+    			}
+    	},
     },
 
     }

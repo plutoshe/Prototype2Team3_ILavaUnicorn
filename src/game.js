@@ -1,6 +1,7 @@
 import { LevelBackground } from "./sprite/level_background.js"
 import { Player } from "./sprite/player.js"
 import {collisionHandlers} from "./collisionHandlers.js"
+import { Enemy } from "./enemy.js"
 
 var config = {
     type: Phaser.AUTO,
@@ -38,7 +39,8 @@ function preload ()
     // 
 
     this.background = new LevelBackground();
-    this.player = new Player()
+    this.player = new Player();
+    this.enemy = new Enemy();
 }
 
 
@@ -76,16 +78,17 @@ function create ()
         blockHeight: 10, 
         blockTexture: ["empty", "full", "rock_static"], 
         levelMap:  [
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,0,0,0,0,0,0,1,1,1],
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,1,2,1,1,1,1,1,1,1],
-            [1,1,0,2,1,2,1,1,1,1],
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,1,1,1,1,1,1,1,1,1]],
+        //   0 1 2 3 4 5 6 7 8 9
+            [1,1,1,1,1,1,1,1,1,1],//0
+            [1,0,0,0,0,0,0,1,1,1],//1
+            [1,1,1,1,1,1,1,1,1,1],//2
+            [1,1,2,1,1,1,1,1,1,1],//3
+            [1,1,0,2,1,2,1,1,1,1],//4
+            [1,1,1,1,1,1,1,1,1,1],//5
+            [1,1,1,1,1,1,1,1,1,1],//6
+            [1,1,1,1,1,1,1,0,0,0],//7
+            [1,1,1,1,1,1,1,1,1,1],//8
+            [1,1,1,1,1,1,1,1,1,1]],//9
 
     }
 
@@ -108,6 +111,17 @@ function create ()
     }
     this.player.create(playerConfig);    
     this.background.blocks["full"][this.player.bx][this.player.by].destroy();
+
+    // enemy config
+    let enemyConfig = {
+        scene: this,
+        x: 9,
+        y: 7,
+        playerTexture: 'star',
+        backgroundCellWidth: this.background.blockTextureWidth,
+        backgroundCellHeight: this.background.blockTextureHeight,
+    }
+    this.enemy.create(enemyConfig);   
 
     // key binding setting
     this.cursors = this.input.keyboard.addKeys({
@@ -132,5 +146,6 @@ function create ()
 function update (){
     this.background.update();
     this.player.update();
+    this.enemy.update();
 }
 
