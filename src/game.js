@@ -1,8 +1,12 @@
-// var background = require("./background")
+import { LevelBackground } from "./sprite/level_background.js"
+import { Player } from "./sprite/player.js"
+import {collisionHandlers} from "./collisionHandlers.js"
+import { Enemy } from "./enemy.js"
+
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: 320,
+    height: 320,
     title: "ABC",
     physics: {
         default: 'arcade',
@@ -17,213 +21,131 @@ var config = {
     }
 };
 
-
-
-function new2DArray(x, y) {
-    var myarray = new Array(x)
-    for (i=0; i < x; i++) 
-        myarray[i] = new Array(y);
-    return myarray;
-    
-}
-
-
-var level_width = 20;
-var level_height = 15;
-var level_maps = new Array(level_height).map(function (x, i) { 
-        return new Array(level_width).map(function(x,i) { return "full";});
-    });
-var blockTexture = ["empty", "full"];
-var player;
-
-var game = new Phaser.Game(config);
-var collisionHandlers = { 
-    "player": 
-        { "full": 
-            function collisionHandler(player, full) {
-                console.log("!!!!");
-                //  When a bullet hits an alien we kill them both
-                // full.kill();
-            },
-        },
-    }
+var levelgame = new Phaser.Game(config);
 
 function preload ()
 {
-    this.load.image('sky', 'assets/sky.png');
-    this.load.image('ground', 'assets/platform.png');
     this.load.image('star', 'assets/star.png');
-    this.load.image('bomb', 'assets/bomb.png');
     this.load.image('full', 'assets/full.png');
     this.load.image('empty', 'assets/empty.png');
+    this.load.image("rock_static", "assets/rock_static.png")
+    this.load.spritesheet('rock_shaking', 'assets/rock_shaking.png', { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('rock_broken', 'assets/rock_broken.png', { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('dude', 
+        'assets/dude.png',
+        { frameWidth: 32, frameHeight: 48 }
+    );
     // this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+    // 
+
+    this.background = new LevelBackground();
+    this.player = new Player();
+    this.enemy = new Enemy();
 }
 
 
 
 function create ()
 {
-    this.oldPassBlock = 0;
-    this.passBlock = 0;
-    this.background = new Background(this, 0, 0, 800, 600, level_width, level_height, blockTexture, level_maps);
-    player = this.physics.add.sprite(0, 0, 'star');
-    player.setScale(40 / player.width, 40 / player.height);
-    player.setCollideWorldBounds(true);
-    player.x = Math.floor(player.x / this.background.blockTextureWidth) * this.background.blockTextureWidth;
-    player.y = Math.floor(player.y / this.background.blockTextureWidth) * this.background.blockTextureWidth;
-    player.bx = Math.floor(player.x / this.background.blockTextureWidth);
-    player.by = Math.floor(player.y / this.background.blockTextureWidth);
-    this.background.blocks["full"][player.x / this.background.blockTextureWidth][player.y / this.background.blockTextureHeight].destroy();
+    this.anims.create({
+        key: 'rock_shaking',
+        // frames: [ { key: 'rock_shaking'} ],
+        frames: this.anims.generateFrameNumbers('rock_shaking'),
+        frameRate: 10,
+        repeat: 1,
+        // OnComplete: this.background.rockShakingDone,
+    });
 
-    // this.physics.add.overlap(player, this.background.blockGroups["full"], sss, null, this);
-    cursors = this.input.keyboard.addKeys({
+    this.anims.create({
+        key: 'rock_broken',
+        // frames: [ { key: 'rock_shaking'} ],
+        frames: this.anims.generateFrameNumbers('rock_broken'),
+        frameRate: 10,
+        hideOnComplete: true,
+        // OnComplete: this.background.rockShakingDone,
+    });
+
+
+
+    // background config
+    let backgroundConfig = {
+        scene: this, 
+        leftTopX: 0, 
+        leftTopY: 0, 
+        width: this.game.config.width, 
+        height: this.game.config.height, 
+        blockWidth: 10, 
+        blockHeight: 10, 
+        blockTexture: ["empty", "full", "rock_static"], 
+        levelMap:  [
+        //   0 1 2 3 4 5 6 7 8 9
+            [1,1,1,1,1,1,1,1,1,1],//0
+            [1,0,0,0,0,0,0,1,1,1],//1
+            [1,1,1,1,1,1,1,1,1,1],//2
+            [1,1,2,1,1,1,1,1,1,1],//3
+            [1,1,0,2,1,2,1,1,1,1],//4
+            [1,1,1,1,1,1,1,1,1,1],//5
+            [1,1,1,1,1,1,1,1,1,1],//6
+            [1,1,1,1,1,1,1,0,0,0],//7
+            [1,1,1,1,1,1,1,1,1,1],//8
+            [1,1,1,1,1,1,1,1,1,1]],//9
+
+    }
+
+    backgroundConfig.levelMap = backgroundConfig.levelMap[0].map(
+        (col, i) => backgroundConfig.levelMap.map(row => row[i]));
+    this.background.create(backgroundConfig);
+
+    this.backgroundCellWidth = this.background.blockWidth;
+    this.backgroundCellHeight = this.background.blockHeight;
+
+    // player config
+
+    let playerConfig = {
+        scene: this,
+        x: 0,
+        y: 1,
+        playerTexture: 'star',
+        backgroundCellWidth: this.background.blockTextureWidth,
+        backgroundCellHeight: this.background.blockTextureHeight,
+    }
+    this.player.create(playerConfig);    
+    this.background.blocks["full"][this.player.bx][this.player.by].destroy();
+
+    // enemy config
+    let enemyConfig = {
+        scene: this,
+        x: 9,
+        y: 7,
+        playerTexture: 'star',
+        backgroundCellWidth: this.background.blockTextureWidth,
+        backgroundCellHeight: this.background.blockTextureHeight,
+    }
+    this.enemy.create(enemyConfig);   
+
+    // key binding setting
+    this.cursors = this.input.keyboard.addKeys({
         "up": Phaser.Input.Keyboard.KeyCodes.UP,
         "down": Phaser.Input.Keyboard.KeyCodes.DOWN,
         "left": Phaser.Input.Keyboard.KeyCodes.LEFT,
         "right": Phaser.Input.Keyboard.KeyCodes.RIGHT,
         "space": Phaser.Input.Keyboard.KeyCodes.SPACE});
-    this.oldplayerX = player.x;
-    this.oldplayerY = player.y;
-    this.oldKey = "";
-    // this.background.blocks["full"][0][0].destroy();
+
+    // conllision setting
+    // console.log(collisionHandlers["collision"]["player"]["rock"]);
+    this.physics.add.overlap(
+        this.player.sprite,
+        this.background.blockGroups["rock_static"],
+        collisionHandlers["collision"]["player"]["rock"]);
+
+    // initialization
+    this.background.initialization();
 }
 
-function collide(a, b) {
-    let a1 = a.getTopLeft();
-    let a2 = a.getBottomRight();
-    let b1 = b.getTopLeft();
-    let b2 = b.getBottomRight();
-    if (b1.x >= a1.x && b1.x <= a2.x && b1.y >= a1.y && b1.y <= a2.y || 
-        a1.x >= b1.x && a1.x <= b2.x && a1.y >= b1.y && a1.y <= b2.y) {
-        if (b2.y == a1.y || b2.x == a1.x || a2.y == b1.y || a2.x == b1.x) return false;
-        return true;
-    } else return false;
-}
-
-function overlapForBlock(player, block)
-{
-    let blockTopLeft = block.getTopLeft();
-    let playerTopLeft = player.getTopLeft();
-    let playerBottomRight = player.getBottomRight();
-    // if (!collide(player, block)) return;
-    if (playerTopLeft.y == blockTopLeft.y) {
-        if (playerBottomRight.x - blockTopLeft.x <= block.width &&
-            playerBottomRight.x - blockTopLeft.x >= block.minX) {
-            block.minX = playerBottomRight.x - blockTopLeft.x;
-        }
-        if (playerTopLeft.x - blockTopLeft.x >= 0 && 
-            playerTopLeft.x - blockTopLeft.x <= block.maxX) {
-            block.maxX = playerTopLeft.x - blockTopLeft.x;
-        }
-    }
-    
-    if (playerTopLeft.x == blockTopLeft.x) {
-        if (playerBottomRight.y - blockTopLeft.y <= block.height && 
-            playerBottomRight.y - blockTopLeft.y >= block.minY) {
-            block.minY = playerBottomRight.y - blockTopLeft.y;
-        }
-        if (playerTopLeft.y - blockTopLeft.y >= 0 && 
-            playerTopLeft.y - blockTopLeft.y <= block.maxY) {
-            block.maxY = playerTopLeft.y - blockTopLeft.y;
-        }
-    }
-    block.setCrop(
-        block.minX / block.scaleX, 
-        block.minY / block.scaleY, 
-        (block.maxX - block.minX) / block.scaleX, 
-        (block.maxY - block.minY) / block.scaleY);
-    
-}
 
 function update (){
-    this.oldPassBlock = this.passBlock;
-    var playerTopLeft = player.getTopLeft();
-    var playerBottomRight = player.getBottomRight();
-    if (this.oldKey != "") {
-
-        var bx = Math.floor(player.dstx / this.background.blockTextureWidth);
-        var by = Math.floor(player.dsty / this.background.blockTextureWidth);
-        console.log(bx, by);
-        overlapForBlock(player, this.background.blocks["full"][bx][by]);
-        if (this.oldKey == "left" && player.x <= player.dstx ||
-            this.oldKey == "right" && player.x >= player.dstx ||
-            this.oldKey == "up" && player.y <= player.dsty ||
-            this.oldKey == "down" && player.y >= player.dsty) {
-            this.oldKey = "";
-            player.setVelocityY(0);
-            player.setVelocityX(0);
-            player.x = player.dstx;
-            player.y = player.dsty;         
-            player.bx = Math.floor(player.x / this.background.blockTextureWidth);
-            player.by = Math.floor(player.y / this.background.blockTextureWidth);
-            this.background.blocks["full"][bx][by].setVisible(false);
-
-        }
-    } else if (cursors['right'].isDown && player.bx < this.background.width)
-    {
-        console.log("right");
-        // player.y = playerTopLeft.y / this.background.blockTextureHeight * this.background.blockTextureHeight + this.background.blockTextureHeight / 2;
-        player.setVelocityY(0);
-        player.setVelocityX(160);
-        
-        player.dstx = player.x + this.background.blockTextureWidth;
-        player.dsty = player.y;
-
-        this.oldKey = "right";
-    } else
-    if (cursors['left'].isDown && player.bx > 0)
-    {
-        console.log("left");
-        // player.y = playerTopLeft.y / this.background.blockTextureHeight * this.background.blockTextureHeight + this.background.blockTextureHeight / 2;
-        player.setVelocityY(0);
-        player.setVelocityX(-160);
-
-        player.dstx = player.x - this.background.blockTextureWidth;
-        player.dsty = player.y;
-
-        this.oldKey = "left";
-    } else
-    if (cursors['up'].isDown && player.by > 0)
-    {
-        // player.x = playerTopLeft.x / this.background.blockTextureWidth * this.background.blockTextureWidth  + this.background.blockTextureWidth / 2;
-        player.setVelocityX(0);
-        player.setVelocityY(-160);
-
-        player.dstx = player.x;
-        player.dsty = player.y - this.background.blockTextureHeight;
-        this.oldKey = "up";
-    } else
-    if (cursors['down'].isDown && player.by < this.background.height)
-    {
-        // player.x = playerTopLeft.x / this.background.blockTextureWidth * this.background.blockTextureWidth + this.background.blockTextureWidth / 2;
-        player.setVelocityX(0);
-        player.setVelocityY(160);
-
-        player.dstx = player.x;
-        player.dsty = player.y + this.background.blockTextureHeight;
-        this.oldKey = "down";
-    } else {
-        player.setVelocityX(0);
-        player.setVelocityY(0);
-    }
-    this.oldplayerTopLeft = playerTopLeft;
-    this.oldplayerBottomRight = playerBottomRight;
-    
-
-
-     // else {
-    //     player.setVelocityX(0);
-    // }
-    
-    // if (cursors.up.isDown)
-    // {
-    //     player.setVelocityY(-160);
-    // }
-    // else if (cursors.down.isDown)
-    // {
-    //     player.setVelocityY(160);   
-    // } else {
-    //     player.setVelocityY(0);
-    // }
+    this.background.update();
+    this.player.update();
+    this.enemy.update();
 }
 
