@@ -52,6 +52,10 @@ var collisionHandlers = {
 						my -=  playerClass.backgroundCellHeight;
 					camera.pan(camera.midPoint.x, my, 50);
 				},
+			"knight":
+				function rescueKnight(player, knight) {
+					knight.destroy();
+				}
 		},
 		
 		"enemy": {

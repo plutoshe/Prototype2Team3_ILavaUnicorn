@@ -17,7 +17,8 @@ export class LevelBackground {
         
         for (var i = 0; i < this.blockWidth; i++) {
             for (var j = 0; j < this.blockHeight; j++) { 
-                if (!blockTexture.createFunction(this.blockTextures[[this.levelMap[i][j]]])) {                 
+                if (!blockTexture.createFunction(
+                        this.getLevelMapTexture(i, j))) {                 
                     continue;
                 } 
             
@@ -25,6 +26,7 @@ export class LevelBackground {
                     this.leftTopX + i * this.blockTextureWidth + this.blockTextureWidth / 2, 
                     this.leftTopY + j * this.blockTextureHeight + this.blockTextureWidth / 2, 
                     blockTexture.texture);
+                console.log(blockTexture);
                 if (blockTexture.group == "full") {
                     block.minX = 0;
                     block.maxX = this.blockTextureWidth;
@@ -54,13 +56,18 @@ export class LevelBackground {
         for (var i in entityTexture.pos) {
             var ex = entityTexture.pos[i][0];
             var ey = entityTexture.pos[i][1];
-            if (!entityTexture.isOK(this.blockTextures[this.levelMap[ex][ey]])) continue;
+            if (entityTexture.backgroundBlockGroup && 
+                entityTexture.backgroundBlockGroup != "")
+                if (entityTexture.backgroundBlockGroup != 
+                    this.getLevelMapGroup(ex, ey)) 
+                        continue;
             var block = blocks.create(
                     this.leftTopX + ex * this.blockTextureWidth + this.blockTextureWidth / 2, 
                     this.leftTopY + ey * this.blockTextureHeight + this.blockTextureHeight / 2, 
                     entityTexture.texture);
             block.setScale(this.blockTextureWidth / block.width, this.blockTextureHeight / block.height);
-            blocksArr[ex][ey] = block;  
+            blocksArr[ex][ey] = block; 
+            this.entityMap[ex][ey] = entityTexture.group;
         }
         return [blocks, blocksArr];
     }
@@ -91,6 +98,13 @@ export class LevelBackground {
     getLevelMap(x, y) {
         return this.levelMap[x][y];
     }
+    getLevelMapTexture(x, y) {
+        return this.blockTextures[this.levelMap[x][y]];
+    }
+    getLevelMapGroup(x, y) {
+        return this.getLevelMapTexture(x,y).group;
+    }
+
     constructor() {}
 
     // config setting
@@ -115,6 +129,7 @@ export class LevelBackground {
         this.blockTextureHeight = config.height / config.displayBlockHeight;
         this.blockTextureWidth = config.width / config.displayBlockWidth;
         this.levelMap = config.levelMap;
+        this.entityMap = new2DArray(config.blockWidth, config.blockHeight);
         
         this.blockGroups = {};
         this.blocks = {};
@@ -146,7 +161,7 @@ export class LevelBackground {
     initialization() {
         for (var i = 0; i < this.blockWidth; i++) {
             for (var j = 1; j < this.blockHeight; j++) {
-                if (this.blockTextures[this.levelMap[i][j]].group == "empty")
+                if (this.getLevelMapGroup(i, j) == "empty")
                     this.checkStone(i, j - 1);
             }
         }
@@ -159,9 +174,12 @@ export class LevelBackground {
                 var bx = Math.floor(stoneTopLeft.x / this.blockTextureWidth);
                 var by = Math.floor(stoneTopLeft.y / this.blockTextureHeight);
                 if (by > this.stones[i][2]) {
-                    this.levelMap[this.stones[i][1]][this.stones[i][2]] = 1;
+                    this.entityMap[this.stones[i][1]][this.stones[i][2]] = "empty";
                 }   
-                if (by >= this.blockHeight - 1 || this.levelMap[bx][by] == 0 && this.levelMap[bx][by + 1] == 1) {
+                if (by >= this.blockHeight - 1 || 
+                    this.getLevelMapGroup(bx, by) == "empty" && 
+                    this.getLevelMapGroup(bx, by + 1) == "full") {
+
                     this.stones[i][0].setVelocityY(0);
                     this.stones[i][0].setTexture("rock_broken");
                     var currentStone = this.stones[i][0];

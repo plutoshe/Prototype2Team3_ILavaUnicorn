@@ -1,5 +1,4 @@
 import {collisionHandlers} from "../collisionHandlers.js"
-//import {LevelBackground} from "./level_background.js"
 export class Player {
 
 	// config setting
@@ -41,6 +40,17 @@ export class Player {
 		this.dsty = this.sprite.y;
 		collisionHandlers["overlap"]["player"]["camera"](this, this.scene.cameras.main);
 	}
+
+	couldGo(bx, by) {
+		console.log(bx, by);
+		console.log(this.scene.background);
+		if (this.bx >= this.scene.background.blockWidth ||
+			this.by >= this.scene.background.blockHeight ||
+			this.bx < 0 || this.by < 0 ||
+		    this.scene.background.entityMap[bx][by] == "rock")
+			return false;
+		return true;
+	}
     
 	update() {
 
@@ -68,7 +78,9 @@ export class Player {
 
 	        }
 	    } 
-	    else if (this.scene.cursors['right'].isDown && this.bx < this.scene.background.blockWidth - 1 && this.scene.background.levelMap[this.bx + 1][this.by] != 2)
+	    else if (this.scene.cursors['right'].isDown && 
+	    		 this.couldGo(this.bx + 1, this.by))
+
 	    {
 	        this.sprite.setVelocityY(0);
 	        this.sprite.setVelocityX(160);
@@ -76,7 +88,8 @@ export class Player {
 	        this.dsty = this.sprite.y;
 	        this.oldKey = "right";
 	    } 
-	    else if (this.scene.cursors['left'].isDown && this.bx > 0 && this.scene.background.levelMap[this.bx - 1][this.by] != 2)
+	    else if (this.scene.cursors['left'].isDown && 
+	    	  	 this.couldGo(this.bx - 1, this.by))
 	    {
 	        this.sprite.setVelocityY(0);
 	        this.sprite.setVelocityX(-160);
@@ -84,7 +97,8 @@ export class Player {
 	        this.dsty = this.sprite.y;
 	        this.oldKey = "left";
 	    } 
-	    else if (this.scene.cursors['up'].isDown && this.by > 0 && this.scene.background.levelMap[this.bx][this.by - 1] != 2)
+	    else if (this.scene.cursors['up'].isDown && 
+	    		 this.couldGo(this.bx, this.by - 1))
 	    {
 	        this.sprite.setVelocityX(0);
 	        this.sprite.setVelocityY(-160);
@@ -92,7 +106,8 @@ export class Player {
 	        this.dsty = this.sprite.y - this.scene.background.blockTextureHeight;
 	        this.oldKey = "up";
 	    } else
-	    if (this.scene.cursors['down'].isDown && this.by < this.scene.background.blockHeight - 1 && this.scene.background.levelMap[this.bx][this.by + 1] != 2)
+	    if (this.scene.cursors['down'].isDown && 
+	    	this.couldGo(this.bx, this.by + 1))
 	    {
 	        this.sprite.setVelocityX(0);
 	        this.sprite.setVelocityY(160);

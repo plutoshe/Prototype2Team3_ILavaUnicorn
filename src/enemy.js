@@ -81,7 +81,7 @@ export class Enemy {
 		switch(direction)
 		{
 			case "up":
-				if( this.scene.background.levelMap[this.bx][this.by - 1] != 0 
+				if( this.scene.background.getLevelMapGroup(this.bx, this.by - 1) != "empty"
 				||  this.by <= 0)
 				{
 					moveComplete = false;
@@ -97,7 +97,7 @@ export class Enemy {
 				}
 				break;
 			case "down":
-				if( this.scene.background.levelMap[this.bx][this.by + 1] != 0 
+				if( this.scene.background.getLevelMapGroup(this.bx, this.by + 1) != "empty"
 				||  this.by >= this.scene.background.blockHeight - 1)
 				{
 					moveComplete = false;
@@ -113,7 +113,7 @@ export class Enemy {
 				}
 				break;
 			case "left":
-				if( this.scene.background.levelMap[this.bx - 1][this.by] != 0 
+				if( this.scene.background.getLevelMapGroup(this.bx - 1, this.by) != "empty" 
 				||  this.bx <= 0 )
 				{
 					moveComplete = false;
@@ -129,7 +129,7 @@ export class Enemy {
 				}
 				break;
 			case "right":
-				if( this.scene.background.levelMap[this.bx + 1][this.by] != 0
+				if( this.scene.background.getLevelMapGroup(this.bx + 1, this.by) != "empty"
 				||  this.bx >= this.scene.background.blockWidth - 1 )
 				{
 					moveComplete = false;

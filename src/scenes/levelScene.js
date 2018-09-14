@@ -1,4 +1,4 @@
-import { LevelBackground } from "../sprites/level_background.js"
+import { LevelBackground } from "../sprites/levelBackground.js"
 import { Player } from "../sprites/player.js"
 import {collisionHandlers} from "../collisionHandlers.js"
 import { Enemy } from "../enemy.js"
@@ -35,27 +35,49 @@ let blockTextures = {
             else return false;
         }
     },
-    3 : {
+    2 : {
         group: "full",
-        texture: "full_special_orange",
+        texture: "full_red",
         createFunction: function(v) {
-            if (v.texture == "full_special_orange") 
+            if (v.texture == "full_red") 
                 return true;
             else return false;
         }
-    }
-}
-
-let entityTextures = {
-    2 : {
-        group: "rock",
-        texture: "rock_static",
-        isOK: function(v) {
-            return (v.group == "full");
-        },
-        pos: [[2, 2], [3, 2], [2, 3]],
+    },
+    3 : {
+        group: "full",
+        texture: "full_orange",
+        createFunction: function(v) {
+            if (v.texture == "full_orange") 
+                return true;
+            else return false;
+        }
+    },
+    4 : {
+        group: "full",
+        texture: "full_pink",
+        createFunction: function(v) {
+            if (v.texture == "full_pink") 
+                return true;
+            else return false;
+        }
     },
 }
+
+let entityTextures = [
+    {
+        group: "rock",
+        texture: "rock_static",
+        backgroundBlockGroup: "full",
+        pos: [[2, 2], [3, 2], [2, 3], [4,2]],
+    },
+    {
+        group: "knight",
+        texture: "knight",
+        backgroundBlockGroup: "empty",
+        pos: [[10, 8]],
+    },
+]
 
 
 let backgroundConfig = { 
@@ -72,10 +94,10 @@ let backgroundConfig = {
         [1,1,1,1,1,1,1,3,1,1,0,1,1,1],
         [1,1,0,1,1,1,1,1,1,1,0,1,1,1],
         [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
-        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
+        [1,1,1,1,2,2,1,0,0,0,0,1,1,1],
+        [1,1,4,4,1,1,1,0,0,0,0,1,1,1],
+        [1,1,4,1,1,2,1,1,1,1,0,1,1,1],
+        [1,1,4,1,1,1,1,1,1,1,0,1,1,1],
         [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
         [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
         [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
@@ -95,7 +117,7 @@ let backgroundConfig = {
 
 let playerConfig = {
     x: 0,
-    y: 17,
+    y: 5,
     playerTexture: 'star',
     cameraBoundry: 2,
 }
@@ -104,8 +126,11 @@ function preload ()
 {
     this.load.image('star', 'assets/star.png');
     this.load.image('full_default', 'assets/full.png');
-    this.load.image('full_special_orange', 'assets/full_1.png');
+    this.load.image('full_orange', 'assets/FullTile_7.png');
+    this.load.image('full_red', 'assets/FullTile_2.png');
+    this.load.image('full_pink', 'assets/FullTile_3.png');
     this.load.image('empty', 'assets/empty.png');
+    this.load.image("knight", "assets/bomb.png")
     this.load.image("rock_static", "assets/rock_static.png")
     this.load.spritesheet('rock_shaking', 'assets/rock_shaking.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('rock_broken', 'assets/rock_broken.png', { frameWidth: 64, frameHeight: 64 });
@@ -186,6 +211,13 @@ function create ()
 
     // conllision setting
     // console.log(collisionHandlers["collision"]["player"]["rock"]);
+
+    this.physics.add.overlap(
+        this.player.sprite,
+        this.background.blockGroups["knight"],
+        collisionHandlers["overlap"]["player"]["knight"]);
+
+
     this.physics.add.overlap(
         this.player.sprite,
         this.background.blockGroups["rock"],
@@ -195,6 +227,7 @@ function create ()
         this.enemy.sprite,
         this.background.blockGroups["rock"],
         collisionHandlers["collision"]["enemy"]["rock"]);
+    
 
     // initialization
     this.background.initialization();
