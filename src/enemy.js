@@ -1,6 +1,3 @@
-import {collisionHandlers} from "./collisionHandlers.js"
-import { collide } from "./helper/helper.js";
-//import EasyStar from "./helper/easystar-0.4.3.js"
 
 export class Enemy {     
 
