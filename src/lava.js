@@ -31,7 +31,10 @@ export class Lava {
         {
             var lavaBlock = this.blocks[i];
             if(this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] == 0)
+            {
                 this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
+                this.background.blocks["full_red"][lavaBlock[0]][lavaBlock[1]].setTexture("full_red");
+            }    
 
             if(this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] == 0)
                 this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] = this.lavaTileIndex;
