@@ -140,7 +140,6 @@ function preload ()
     this.background = new LevelBackground();
     this.player = new Player();
     this.enemy = new Enemy();
-    this.lava = new Lava();
 }
 
 
@@ -204,13 +203,6 @@ function create ()
     }   
     this.enemy.create(enemyConfig); 
     
-    let lavaConfig = {
-        scene: this,
-        lavaTileIndex: 2,
-        spreadSpeed: 5
-    }
-    this.lava.create(lavaConfig);
-
     // key binding setting
     this.cursors = this.input.keyboard.addKeys({
         "up": Phaser.Input.Keyboard.KeyCodes.UP,
@@ -250,5 +242,4 @@ function update (){
     this.background.update();
     this.player.update();
     this.enemy.update();
-    this.lava.update();
 }
