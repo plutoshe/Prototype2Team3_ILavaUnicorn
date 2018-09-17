@@ -2,6 +2,8 @@ import { LevelBackground } from "../sprites/levelBackground.js"
 import { Player } from "../sprites/player.js"
 import {collisionHandlers} from "../collisionHandlers.js"
 import { Enemy } from "../enemy.js"
+import { Lava } from "../lava.js"
+
 export var levelScene = new Phaser.Class({
     Extends: Phaser.Scene,
     initialize: 
@@ -36,7 +38,7 @@ let blockTextures = {
         }
     },
     2 : {
-        group: "full",
+        group: "full_red",
         texture: "full_red",
         createFunction: function(v) {
             if (v.texture == "full_red") 
@@ -138,6 +140,7 @@ function preload ()
     this.background = new LevelBackground();
     this.player = new Player();
     this.enemy = new Enemy();
+    this.lava = new Lava();
 }
 
 
@@ -199,7 +202,14 @@ function create ()
         backgroundCellHeight: this.background.blockTextureHeight,
         speed: 50
     }   
-    this.enemy.create(enemyConfig);  
+    this.enemy.create(enemyConfig); 
+    
+    let lavaConfig = {
+        scene: this,
+        lavaTileIndex: 2,
+        spreadSpeed: 5
+    }
+    this.lava.create(lavaConfig);
 
     // key binding setting
     this.cursors = this.input.keyboard.addKeys({
@@ -240,4 +250,5 @@ function update (){
     this.background.update();
     this.player.update();
     this.enemy.update();
+    this.lava.update();
 }
