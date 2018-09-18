@@ -37,9 +37,8 @@ export class Player {
     	this.attack.boundryMaxX = this.scene.background.canvasWidth - this.backgroundCellWidth / 4;
     	this.attack.boundryMinY = this.backgroundCellHeight / 4;
     	this.attack.boundryMaxY = this.scene.background.canvasHeight - this.backgroundCellHeight / 4;
+    	this.attack.dispearDistance = this.backgroundCellHeight / 8;
     	
-		// console.log(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
-
 	    this.sprite.setScale(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
 	    // this.sprite.setCollideWorldBounds(true);
 	    
@@ -65,36 +64,52 @@ export class Player {
 			return false;
 		return true;
 	}
+
+	couldGoAttack(x, y, vx, vy) {
+		
+		let bx = Math.floor((x + this.attack.dispearDistance) / this.backgroundCellWidth);// + (vx > 0) - (vx < 0);
+	    let by = Math.floor((y + this.attack.dispearDistance) / this.backgroundCellHeight);// + (vy > 0) - (vy < 0);
+	    
+	    if (bx >= this.scene.background.blockWidth ||
+			by >= this.scene.background.blockHeight ||
+			bx < 0 || by < 0)
+			return false;
+    	return this.scene.background.getLevelMapGroup(bx, by) == "empty";
+	}
     
 	update() {
 		var playerTopLeft = this.sprite.getTopLeft();
     	var playerBottomRight = this.sprite.getBottomRight();
-    	if (this.scene.cursors['attack'].isDown && !this.attack.visible) {
-    		this.attack.setVisible(true);
-    		this.attack.ox = this.sprite.x;
-    		this.attack.oy = this.sprite.y;
-    		this.attack.x = this.sprite.x;
-    		this.attack.y = this.sprite.y;
-    		this.attack.angle = this.sprite.angle;
-    		this.attack.flipX = this.sprite.flipX;
-    		this.attack.play('player_attack');
-    		this.attack.vx = 0;
-    		this.attack.vy = 0;
-    		this.attack.isRecycle = false;
-    		if (this.attack.angle != 0) this.attack.vy = 180; else this.attack.vx = 180;
-    		if (!this.attack.flipX) {
-    			this.attack.vy = -this.attack.vy;
-    			this.attack.vx = -this.attack.vx;
-    		}
-    		this.attack.setVelocity(this.attack.vx, this.attack.vy);
+    	if (this.oldKey == "") {
+	    	if (this.scene.cursors['attack'].isDown && !this.attack.visible) {
+	    		this.attack.setVisible(true);
+	    		this.attack.ox = this.sprite.x;
+	    		this.attack.oy = this.sprite.y;
+	    		this.attack.x = this.sprite.x;
+	    		this.attack.y = this.sprite.y;
+	    		this.attack.angle = this.sprite.angle;
+	    		this.attack.flipX = this.sprite.flipX;
+	    		this.attack.play('player_attack');
+	    		this.attack.vx = 0;
+	    		this.attack.vy = 0;
+	    		this.attack.canRecycle = false;
+	    		if (this.attack.angle != 0) this.attack.vy = 180; else this.attack.vx = 180;
+	    		if (!this.attack.flipX) {
+	    			this.attack.vy = -this.attack.vy;
+	    			this.attack.vx = -this.attack.vx;
+	    		}
+	    		this.attack.setVelocity(this.attack.vx, this.attack.vy);
+	    	}
     	}
-    	console.log(this.attack.y, this.scene.width, this.scene.height, this.backgroundCellHeight / 4);
-    	if (Math.abs(this.attack.ox - this.attack.x) > this.attack.distanceX || 
+    	if (this.attack.visible && 
+    		(Math.abs(this.attack.ox - this.attack.x) > this.attack.distanceX || 
     		Math.abs(this.attack.oy - this.attack.y) > this.attack.distanceY || 
     		this.attack.x < this.attack.boundryMinX || 
     		this.attack.x > this.attack.boundryMaxX || 
     		this.attack.y < this.attack.boundryMinY || 
-    		this.attack.y > this.attack.boundryMaxY) {
+    		this.attack.y > this.attack.boundryMaxY || 
+    		!this.couldGoAttack(this.attack.x, this.attack.y, this.attack.vx, this.attack.vy))) {
+    		this.attack.canRecycle = true;
     		this.attack.vx = -this.attack.vx;
     		this.attack.vy = -this.attack.vy;
     		this.attack.setVelocity(this.attack.vx, this.attack.vy);

@@ -15,7 +15,6 @@ export class Lava {
 
         this.findLavaBlocks();
 
-        //console.log(this.blocks.length);
     }
 
     update()

@@ -159,7 +159,6 @@ export class LevelBackground {
                 }
             }
         }
-        console.log(this.stones);
         
     }
 
@@ -191,7 +190,6 @@ export class LevelBackground {
                     currentStone.on(
                         "animationcomplete",
                         function (animation, frame) {
-                            console.log("disableBody for rock");
                             currentStone.disableBody(true, true);
                         });
                     this.stones[i][0].anims.play("rock_broken");

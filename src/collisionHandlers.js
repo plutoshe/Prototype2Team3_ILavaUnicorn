@@ -2,6 +2,18 @@ import {collide, min, max} from "./helper/helper.js"
 var collisionHandlers = { 
 	"overlap": {
 	    "player": {
+	    	"player_attack":
+	    		function attackRetrieve(player, attack) {
+	    			if (attack.canRecycle && 
+	    				(attack.vx != 0 && Math.abs(player.x - attack.x) < attack.dispearDistance ||
+	    				 attack.vy != 0 && Math.abs(player.y - attack.y) < attack.dispearDistance)) {
+	    			attack.setVisible(false);
+	    			attack.anims.pause();
+	    			attack.setVelocity(0, 0);
+	    			attack.x = -10;
+	    			attack.y = -10;
+	    			}
+	    		},
         	"full_block": 
 				function overlapForBlock(player, block)
 				{

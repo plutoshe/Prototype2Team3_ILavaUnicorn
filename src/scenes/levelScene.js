@@ -245,7 +245,6 @@ function create ()
         "attack": Phaser.Input.Keyboard.KeyCodes.SPACE});
 
     // conllision setting
-    // console.log(collisionHandlers["collision"]["player"]["rock"]);
 
     this.physics.add.overlap(
         this.player.sprite,
@@ -257,6 +256,12 @@ function create ()
         this.player.sprite,
         this.background.blockGroups["rock"],
         collisionHandlers["collision"]["player"]["rock"]);
+
+    this.physics.add.overlap(
+        this.player.sprite,
+        this.player.attack,
+        collisionHandlers["overlap"]["player"]["player_attack"]);
+
 
     // this.physics.add.overlap(
     //     this.enemy.sprite,
