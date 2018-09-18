@@ -265,10 +265,13 @@ function create ()
         "player": this.player.sprite,
         "enemy": this.enemy.sprite,
         "player_attack": this.player.attack,
+        "lava": this.background.lava.blocksGroup, 
     }
     for (var i in collisionHandlers)
         for (var j in collisionHandlers[i]) {
             for (var k in collisionHandlers[i][j]) {
+                console.log(j,k,collsionObj[j],
+                            collsionObj[k]);
                 this.physics.add.overlap(
                     collsionObj[j],
                     collsionObj[k],
