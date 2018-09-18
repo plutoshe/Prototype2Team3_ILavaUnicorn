@@ -24,8 +24,32 @@ export class Lava {
             callbackScope: this,
             args: this
         });
+        this.lavaTexture = this.background.blockTextures[this.lavaTileIndex];
+        var tmp = this.background.addBlockTextureGroup(
+            this.lavaTexture);
+        this.blocksGroup = tmp[0];
+        this.blocksArr = tmp[1];
+        this.blocks = []
+        for (var i = 0; i < this.background.blockWidth; i++) {
+            for (var j = 0; j < this.background.blockHeight; j++) {
+                if (this.blocksArr[i][j]) {         
+                    this.blocks.push([i, j]);
+                }
+            }
+        }
+    }
 
-        this.findLavaBlocks();
+
+    addNewLavaBlock(i, j) {
+        var newBlock = this.blocksGroup.create(
+                    this.background.leftTopX + i * this.background.blockTextureWidth + this.background.blockTextureWidth / 2, 
+                    this.background.leftTopY + j * this.background.blockTextureHeight + this.background.blockTextureHeight / 2, 
+                    this.lavaTexture.texture);
+        newBlock.setScale(this.background.blockTextureWidth / newBlock.width, 
+                          this.background.blockTextureHeight / newBlock.height);
+        newBlock.moves = false;
+        this.blocksArr[i][j] = newBlock;
+        this.blocks.push([i,j]);
     }
 
     update()
@@ -49,8 +73,7 @@ export class Lava {
                     this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
                     if(!checkTupleInArray(this.blocks,[lavaBlock[0] + 1,lavaBlock[1]]))
                     {
-                        this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
-                        didSomething = true;
+                        this.addNewLavaBlock(lavaBlock[0] + 1,lavaBlock[1]);
                     }
                     //console.log(this.blocks);
                 }
@@ -60,8 +83,7 @@ export class Lava {
                     this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] = this.lavaTileIndex;
                     if(!checkTupleInArray(this.blocks,[lavaBlock[0] - 1,lavaBlock[1]]))
                     {
-                        this.blocks.push([lavaBlock[0] - 1,lavaBlock[1]]);
-                        didSomething = true;
+                        this.addNewLavaBlock(lavaBlock[0] - 1,lavaBlock[1]);
                     }
                     //console.log(this.blocks);
                 }
@@ -71,8 +93,7 @@ export class Lava {
                     this.background.levelMap[lavaBlock[0]][lavaBlock[1] - 1] = this.lavaTileIndex;
                     if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] - 1]))
                     {
-                        this.blocks.push([lavaBlock[0],lavaBlock[1] - 1 ]);
-                        didSomething = true;
+                        this.addNewLavaBlock(lavaBlock[0],lavaBlock[1] - 1);
                     }
                     //console.log(this.blocks);
                 }
@@ -82,17 +103,11 @@ export class Lava {
                     this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] = this.lavaTileIndex;
                     if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] + 1]))
                     {
-                        this.blocks.push([lavaBlock[0],lavaBlock[1] + 1]);
-                        didSomething = true;
+                        this.addNewLavaBlock(lavaBlock[0],lavaBlock[1] + 1);
                     }
                     //console.log(this.blocks);
                 }
         }
-        if(didSomething)
-        {
-            //this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
-            addTexture(this.background.blockTextures[this.lavaTileIndex], this.background, this.blocks);
-        }    
     }
 
     gravityFill()
@@ -110,8 +125,7 @@ export class Lava {
                     this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
                     if(!checkTupleInArray(this.blocks,[lavaBlock[0] + 1,lavaBlock[1]]))
                     {
-                        this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
-                        didSomething = true;
+                        this.addNewLavaBlock(lavaBlock[0] + 1,lavaBlock[1]);
                     }
                     console.log(this.blocks);
                 }
@@ -121,8 +135,7 @@ export class Lava {
                     this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] = this.lavaTileIndex;
                     if(!checkTupleInArray(this.blocks,[lavaBlock[0] - 1,lavaBlock[1]]))
                     {
-                        this.blocks.push([lavaBlock[0] - 1,lavaBlock[1]]);
-                        didSomething = true;
+                        this.addNewLavaBlock(lavaBlock[0] - 1,lavaBlock[1]);
                     }
                     console.log(this.blocks);
                 }
@@ -132,32 +145,14 @@ export class Lava {
                     this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] = this.lavaTileIndex;
                     if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] + 1]))
                     {
-                        this.blocks.push([lavaBlock[0],lavaBlock[1] + 1]);
-                        didSomething = true;
+                        this.addNewLavaBlock(lavaBlock[0],lavaBlock[1] + 1);
                     }
                     console.log(this.blocks);
                 }
         }
-        if(didSomething)
-        {
-            this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
-        }    
 	}
 
-    findLavaBlocks()
-    {
-        this.blocks = [];
-        var i,j;
 
-        for(i=0;i < this.background.blockWidth; i++)
-            for(j=0;j < this.background.blockHeight; j++)
-                if(this.background.levelMap[i][j] == this.lavaTileIndex)
-                    if(!checkTupleInArray(this.blocks,[i,j]))
-                    {
-                        this.blocks.push([i,j]);
-                        console.log("Lava Block at " + i + ", "+ j);
-                    }
-    }
 }
 
 function compareTuples(a1,a2)
@@ -188,34 +183,4 @@ function checkTupleInArray(arr,t)
 var update = function(lava)
 {
     lava.gravityFill();
-}
-
-var addTexture = function(blockTexture,background,lavaBlocks)
-{
-    var blocks = background.blockGroups[blockTexture.group];
-    var blocksArr = background.blocks[blockTexture.group];
-
-    for (var k = 0; k < lavaBlocks.length; k++) {
-        var i = lavaBlocks[k][0];
-        var j = lavaBlocks[k][1];
-        
-            if (!blockTexture.createFunction(
-                    background.getLevelMapTexture(i, j))) {                 
-                continue;
-            } 
-        
-            var block = blocks.create(
-                background.leftTopX + i * background.blockTextureWidth + background.blockTextureWidth / 2, 
-                background.leftTopY + j * background.blockTextureHeight + background.blockTextureWidth / 2, 
-                blockTexture.texture);
-            if (blockTexture.group == "full") {
-                block.minX = 0;
-                block.maxX = background.blockTextureWidth;
-                block.minY = 0;
-                block.maxY = background.blockTextureHeight;
-            }
-            block.setScale(background.blockTextureWidth / block.width, background.blockTextureHeight / block.height);
-            block.moves = false;
-            blocksArr[i][j] = block;
-    }
 }
