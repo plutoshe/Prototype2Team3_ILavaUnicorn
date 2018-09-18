@@ -38,10 +38,10 @@ let blockTextures = {
         }
     },
     2 : {
-        group: "full",
-        texture: "full_red",
+        group: "full_red",
+        texture: "lava",//full_red
         createFunction: function(v) {
-            if (v.texture == "full_red") 
+            if (v.texture == "lava") 
                 return true;
             else return false;
         }
@@ -143,8 +143,7 @@ function preload ()
     this.load.image('full_orange', 'assets/FullTile_7.png');
     this.load.image('full_red', 'assets/FullTile_2.png');
     this.load.image('full_pink', 'assets/FullTile_3.png');
-
-    this.load.image('lava', 'assets/lava.png');
+    this.load.image('lava', 'assets/MagmaTiledTurned.png');
     this.load.image('empty', 'assets/empty.png');
 
     this.load.image("rock_static", "assets/rock_static.png")
@@ -160,7 +159,6 @@ function preload ()
     this.background = new LevelBackground();
     this.player = new Player();
     this.enemy = new Enemy();
-    this.lava = new Lava();
 }
 
 
@@ -234,7 +232,6 @@ function create ()
     this.player.create(playerConfig);    
     if (this.background.blocks["full"][this.player.bx][this.player.by])
         this.background.blocks["full"][this.player.bx][this.player.by].destroy();
-
     // enemy config
     let enemyConfig = {
         scene: this,
@@ -248,13 +245,6 @@ function create ()
     }   
     this.enemy.create(enemyConfig); 
     
-    let lavaConfig = {
-        scene: this,
-        lavaTileIndex: 5,
-        spreadSpeed: 5
-    }
-    this.lava.create(lavaConfig);
-
     // key binding setting
     this.cursors = this.input.keyboard.addKeys({
         "up": Phaser.Input.Keyboard.KeyCodes.UP,
@@ -291,6 +281,5 @@ function create ()
 function update (){
     this.background.update();
     this.player.update();
-    // this.enemy.update();
-    // this.lava.update();
+    this.enemy.update();
 }

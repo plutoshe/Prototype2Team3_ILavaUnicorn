@@ -1,5 +1,5 @@
 import { new2DArray } from "../helper/helper.js"
-
+import { Lava } from "../lava.js"
 
 export class LevelBackground {
 
@@ -107,7 +107,9 @@ export class LevelBackground {
         return this.getLevelMapTexture(x,y).group;
     }
 
-    constructor() {}
+    constructor() {
+        this.lava = new Lava();
+    }
 
     // config setting
     // scene: background of current scene
@@ -159,6 +161,17 @@ export class LevelBackground {
                 }
             }
         }
+
+        let lavaConfig = {
+            background: this,
+            scene: this.scene,
+            lavaTileIndex: 2,
+            spreadSpeed: 5000,
+            lavaContent: 3
+        }
+        this.lava.create(lavaConfig);
+
+        console.log(this.stones);
         
     }
 
@@ -198,6 +211,7 @@ export class LevelBackground {
 
             }
         }
+        //this.lava.update();
     }
-
+        
 }
