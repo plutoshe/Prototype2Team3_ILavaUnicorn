@@ -71,9 +71,6 @@ var collisionHandlers = {
 				},
 			"knight":
 				function rescueKnight(player, knight) {
-					console.log("player meet knight");
-					console.log(Math.abs(knight.x - player.x), player.sensitiveDistance);
-					console.log(Math.abs(knight.y - player.y), player.sensitiveDistance);
 					if (Math.abs(knight.x - player.x) < player.sensitiveDistance &&
 	    				Math.abs(knight.y - player.y) < player.sensitiveDistance) {
 						knight.disableBody(true, true);
@@ -112,6 +109,29 @@ var collisionHandlers = {
 					}
 
 				},
+		},
+		"lava":{
+			"rock": function(lava, rock) {
+				console.log("rock meets lava");
+				rock.disableBody(true, true);
+			},
+			"player": function(player, lava) {
+				console.log("player meets lava");
+				if (Math.abs(lava.x - player.x) < player.sensitiveDistance &&
+	    			Math.abs(lava.y - player.y) < player.sensitiveDistance) {
+					player.disableBody(true, true);
+				}
+				// player.disableBody(true, true);
+				// player.disableBody(true, true);
+			},
+			"enemy": function(enemy, lava) {
+				console.log("enemy meets lava");
+				enemy.disableBody(true, true);
+			},
+			"knight": function(lava, knight) {
+				console.log("knight meets lava");
+				knight.disableBody(true, true);
+			}
 		},
 		"enemy": {
         	"full_block": 
