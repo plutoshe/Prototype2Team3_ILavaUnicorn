@@ -42,18 +42,16 @@ export class Player {
 	}
 
 	couldGo(bx, by) {
-		console.log(bx, by);
-		console.log(this.scene.background);
-		if (this.bx >= this.scene.background.blockWidth ||
-			this.by >= this.scene.background.blockHeight ||
-			this.bx < 0 || this.by < 0 ||
-		    this.scene.background.entityMap[bx][by] == "rock")
+		if (bx >= this.scene.background.blockWidth ||
+			by >= this.scene.background.blockHeight ||
+			bx < 0 || by < 0 ||
+		    (this.scene.background.entityMap[bx][by] && 
+		    this.scene.background.entityMap[bx][by] == "rock"))
 			return false;
 		return true;
 	}
     
 	update() {
-
 		var playerTopLeft = this.sprite.getTopLeft();
     	var playerBottomRight = this.sprite.getBottomRight();
 	    if (this.oldKey != "") {

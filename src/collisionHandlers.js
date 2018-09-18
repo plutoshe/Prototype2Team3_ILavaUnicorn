@@ -41,6 +41,7 @@ var collisionHandlers = {
 			"camera":
 				function beyondCamearaLimit(playerClass, camera) {
 					var my = camera.midPoint.y;
+					
 					while (playerClass.dsty + playerClass.backgroundCellHeight / 2 >
 					 	my + camera.height / 2 - 
 					 	playerClass.cameraBoundry * playerClass.backgroundCellHeight) {
