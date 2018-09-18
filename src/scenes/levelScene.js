@@ -296,8 +296,8 @@ function create ()
         this.game.config.width,
         this.game.config.height / backgroundConfig.displayBlockHeight * backgroundConfig.blockHeight);
     // background config
-    backgroundConfig.width = this.game.config.width, 
-    backgroundConfig.height = this.game.config.height,
+    backgroundConfig.width = this.game.config.width;
+    backgroundConfig.height = this.game.config.height;
     backgroundConfig.blockTextures = blockTextures;
     backgroundConfig.entityTextures = entityTextures;
     backgroundConfig.scene = this;    

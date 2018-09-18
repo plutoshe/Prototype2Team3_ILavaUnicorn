@@ -11,12 +11,16 @@ export var startScene = new Phaser.Class({
 
     preload: function ()
     {
-        this.load.image('arrow', 'assets/star.png');
+        this.load.image('start', 'assets/start.png');
     },
 
     create: function ()
     {
-        this.arrow = this.add.sprite(400, 300, 'arrow').setOrigin(0, 0.5);
+        this.background = this.add.sprite(this.game.config.width / 2, 
+                                          this.game.config.height / 2, 
+                                          'start');
+        this.background.setScale(this.game.config.width / this.background.width, 
+            this.game.config.height / this.background.height);
         this.input.once('pointerdown', function (event) {
             this.scene.start('levelScene');
         }, this);
@@ -24,7 +28,6 @@ export var startScene = new Phaser.Class({
 
     update: function (time, delta)
     {
-        this.arrow.rotation += 0.01;
     }
 
 });
