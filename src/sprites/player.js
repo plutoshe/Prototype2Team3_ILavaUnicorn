@@ -19,10 +19,12 @@ export class Player {
     	this.backgroundCellHeight = config.backgroundCellHeight;
     	this.cameraBoundry = config.cameraBoundry;
     	
+    	// this.add.sprite(400, y, 'gems').play(key);
+
 		this.sprite = this.scene.physics.add.sprite(
 			config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
 			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
-			config.playerTexture);
+			"player_idle");
 		// console.log(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
 
 	    this.sprite.setScale(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
@@ -54,6 +56,12 @@ export class Player {
 	update() {
 		var playerTopLeft = this.sprite.getTopLeft();
     	var playerBottomRight = this.sprite.getBottomRight();
+    	// if (this.scene.cursors['attack']) {
+    	// 	this.attack.setVisible(true);
+    	// 	this.attack.x = this.sprite.x;
+    	// 	this.attack.y = this.sprite.y;
+    	// }
+
 	    if (this.oldKey != "") {
 	        var bx = Math.floor(this.dstx / this.backgroundCellWidth);
 	        var by = Math.floor(this.dsty / this.backgroundCellHeight);
@@ -67,7 +75,8 @@ export class Player {
 	            this.sprite.setVelocityY(0);
 	            this.sprite.setVelocityX(0);
 	            this.sprite.x = this.dstx;
-	            this.sprite.y = this.dsty;         
+	            this.sprite.y = this.dsty;   
+	            this.sprite.setTexture("player_idle");      
 	            this.bx = Math.floor(this.sprite.x / this.backgroundCellWidth);
 				this.by = Math.floor(this.sprite.y / this.backgroundCellHeight);
 				if ( this.scene.background.blocks["full"][bx][by] != null) 
@@ -85,6 +94,9 @@ export class Player {
 	        this.dstx = this.sprite.x + this.backgroundCellWidth;
 	        this.dsty = this.sprite.y;
 	        this.oldKey = "right";
+	        this.sprite.angle = 0;
+	        this.sprite.flipX = true;
+	        this.sprite.setTexture("player_move");
 	    } 
 	    else if (this.scene.cursors['left'].isDown && 
 	    	  	 this.couldGo(this.bx - 1, this.by))
@@ -94,6 +106,9 @@ export class Player {
 	        this.dstx = this.sprite.x - this.backgroundCellWidth;
 	        this.dsty = this.sprite.y;
 	        this.oldKey = "left";
+	        this.sprite.angle = 0;
+	        this.sprite.flipX = false;
+	        this.sprite.setTexture("player_move");
 	    } 
 	    else if (this.scene.cursors['up'].isDown && 
 	    		 this.couldGo(this.bx, this.by - 1))
@@ -103,6 +118,10 @@ export class Player {
 	        this.dstx = this.sprite.x;
 	        this.dsty = this.sprite.y - this.scene.background.blockTextureHeight;
 	        this.oldKey = "up";
+	        this.sprite.angle = 90;
+	        this.sprite.flipX = false;
+	        this.sprite.flipY = false;
+	        this.sprite.setTexture("player_move");
 	    } else
 	    if (this.scene.cursors['down'].isDown && 
 	    	this.couldGo(this.bx, this.by + 1))
@@ -112,9 +131,14 @@ export class Player {
 	        this.dstx = this.sprite.x;
 	        this.dsty = this.sprite.y + this.scene.background.blockTextureHeight;
 	        this.oldKey = "down";
+	        this.sprite.angle = 270;
+	        this.sprite.flipX = false;
+	        this.sprite.flipY = false;
+	        this.sprite.setTexture("player_move");
 	    } else {
 	        this.sprite.setVelocityX(0);
 	        this.sprite.setVelocityY(0);
+	        this.sprite.setTexture("player_idle");
 	    }
 	}
 

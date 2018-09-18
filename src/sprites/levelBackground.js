@@ -26,7 +26,6 @@ export class LevelBackground {
                     this.leftTopX + i * this.blockTextureWidth + this.blockTextureWidth / 2, 
                     this.leftTopY + j * this.blockTextureHeight + this.blockTextureWidth / 2, 
                     blockTexture.texture);
-                console.log(blockTexture);
                 if (blockTexture.group == "full") {
                     block.minX = 0;
                     block.maxX = this.blockTextureWidth;

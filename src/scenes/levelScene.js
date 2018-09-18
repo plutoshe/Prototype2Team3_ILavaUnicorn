@@ -38,7 +38,7 @@ let blockTextures = {
         }
     },
     2 : {
-        group: "full_red",
+        group: "full",
         texture: "full_red",
         createFunction: function(v) {
             if (v.texture == "full_red") 
@@ -91,29 +91,29 @@ let backgroundConfig = {
     blockHeight: 24,
     levelMap:  [
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,0,0,0,0,0,0,1,1,1,0,1,1,1],
-        [1,1,3,3,1,1,1,1,1,1,0,1,1,1],
-        [1,1,1,1,1,1,1,3,1,1,0,1,1,1],
-        [1,1,0,1,1,1,1,1,1,1,0,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-        [1,1,1,1,2,2,1,0,0,0,0,1,1,1],
-        [1,1,4,4,1,1,1,0,0,0,0,1,1,1],
-        [1,1,4,1,1,2,1,1,1,1,0,1,1,1],
-        [1,1,4,1,1,1,1,1,1,1,0,1,1,1],
-        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
-        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
-        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
-        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
-        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
-        [1,1,1,1,1,1,1,0,0,0,0,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,0,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,0,1,1,1]],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,0,0,1,1,1],
+        [2,2,2,2,2,2,2,2,2,0,0,2,2,2],
+        [2,2,2,2,0,0,0,2,2,2,2,2,2,2],
+        [2,2,2,2,0,0,0,2,2,2,2,2,2,2],
+        [2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+        [2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+        [2,2,2,2,0,0,2,2,2,2,0,0,2,2],
+        [3,3,3,3,0,0,3,3,3,3,0,0,3,3],
+        [3,3,3,3,3,3,3,3,3,3,0,0,3,3],
+        [3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+        [3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+        [3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+        [3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+        [4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+        [4,4,4,4,4,4,4,4,0,0,4,4,4,4],
+        [4,4,4,4,4,4,4,4,4,0,0,4,4,4],
+        [4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+        [4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+        [4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+        [4,4,4,4,4,4,4,4,4,4,4,4,4,4]],
 
 }
 
@@ -132,10 +132,15 @@ function preload ()
     this.load.image('full_red', 'assets/FullTile_2.png');
     this.load.image('full_pink', 'assets/FullTile_3.png');
     this.load.image('empty', 'assets/empty.png');
-    this.load.image("knight", "assets/bomb.png")
+
+
+    this.load.image("knight", "assets/bomb.png");
     this.load.image("rock_static", "assets/rock_static.png")
     this.load.spritesheet('rock_shaking', 'assets/rock_shaking.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('rock_broken', 'assets/rock_broken.png', { frameWidth: 64, frameHeight: 64 });
+
+    this.load.spritesheet('player_idle', 'assets/player_idle.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('player_move', 'assets/player_movement.png', { frameWidth: 128, frameHeight: 128 });
 
     this.background = new LevelBackground();
     this.player = new Player();
@@ -148,21 +153,28 @@ function preload ()
 function create ()
 {
     this.anims.create({
+        key: 'player_idle',
+        frames: this.anims.generateFrameNumbers('player_idle'),
+        frameRate: 10,
+    });
+    this.anims.create({
+        key: 'player_move',
+        frames: this.anims.generateFrameNumbers('player_move'),
+        frameRate: 10,
+    });
+
+    this.anims.create({
         key: 'rock_shaking',
-        // frames: [ { key: 'rock_shaking'} ],
         frames: this.anims.generateFrameNumbers('rock_shaking'),
         frameRate: 10,
         repeat: 1,
-        // OnComplete: this.background.rockShakingDone,
     });
-
     this.anims.create({
         key: 'rock_broken',
         // frames: [ { key: 'rock_shaking'} ],
         frames: this.anims.generateFrameNumbers('rock_broken'),
         frameRate: 10,
         hideOnComplete: true,
-        // OnComplete: this.background.rockShakingDone,
     });
     this.cameras.main.setBounds(
         0,
@@ -174,9 +186,7 @@ function create ()
     backgroundConfig.height = this.game.config.height,
     backgroundConfig.blockTextures = blockTextures;
     backgroundConfig.entityTextures = entityTextures;
-    backgroundConfig.scene = this;
-    
-
+    backgroundConfig.scene = this;    
     backgroundConfig.levelMap = backgroundConfig.levelMap[0].map(
         (col, i) => backgroundConfig.levelMap.map(row => row[i]));
     this.background.create(backgroundConfig);
@@ -193,23 +203,23 @@ function create ()
         this.background.blocks["full"][this.player.bx][this.player.by].destroy();
 
     // enemy config
-     let enemyConfig = {
-        scene: this,
-        x: 9,
-        y: 7,
-        playerTexture: 'star',
-        backgroundCellWidth: this.background.blockTextureWidth,
-        backgroundCellHeight: this.background.blockTextureHeight,
-        speed: 50
-    }   
-    this.enemy.create(enemyConfig); 
+    //  let enemyConfig = {
+    //     scene: this,
+    //     x: 9,
+    //     y: 7,
+    //     playerTexture: 'star',
+    //     backgroundCellWidth: this.background.blockTextureWidth,
+    //     backgroundCellHeight: this.background.blockTextureHeight,
+    //     speed: 50
+    // }   
+    // this.enemy.create(enemyConfig); 
     
-    let lavaConfig = {
-        scene: this,
-        lavaTileIndex: 2,
-        spreadSpeed: 5
-    }
-    this.lava.create(lavaConfig);
+    // let lavaConfig = {
+    //     scene: this,
+    //     lavaTileIndex: 2,
+    //     spreadSpeed: 5
+    // }
+    // this.lava.create(lavaConfig);
 
     // key binding setting
     this.cursors = this.input.keyboard.addKeys({
@@ -217,7 +227,8 @@ function create ()
         "down": Phaser.Input.Keyboard.KeyCodes.DOWN,
         "left": Phaser.Input.Keyboard.KeyCodes.LEFT,
         "right": Phaser.Input.Keyboard.KeyCodes.RIGHT,
-        "space": Phaser.Input.Keyboard.KeyCodes.SPACE});
+        "space": Phaser.Input.Keyboard.KeyCodes.SPACE,
+        "attack": Phaser.Input.Keyboard.KeyCodes.J});
 
     // conllision setting
     // console.log(collisionHandlers["collision"]["player"]["rock"]);
@@ -233,10 +244,10 @@ function create ()
         this.background.blockGroups["rock"],
         collisionHandlers["collision"]["player"]["rock"]);
 
-    this.physics.add.overlap(
-        this.enemy.sprite,
-        this.background.blockGroups["rock"],
-        collisionHandlers["collision"]["enemy"]["rock"]);
+    // this.physics.add.overlap(
+    //     this.enemy.sprite,
+    //     this.background.blockGroups["rock"],
+    //     collisionHandlers["collision"]["enemy"]["rock"]);
     
 
     // initialization
@@ -249,6 +260,6 @@ function create ()
 function update (){
     this.background.update();
     this.player.update();
-    this.enemy.update();
-    this.lava.update();
+    // this.enemy.update();
+    // this.lava.update();
 }
