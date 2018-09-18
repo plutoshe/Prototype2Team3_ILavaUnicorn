@@ -1,4 +1,4 @@
-import {collide} from "./helper/helper.js"
+import {collide, min, max} from "./helper/helper.js"
 var collisionHandlers = { 
 	"overlap": {
 	    "player": {
@@ -9,26 +9,30 @@ var collisionHandlers = {
 				    let blockTopLeft = block.getTopLeft();
 				    let playerTopLeft = player.getTopLeft();
 				    let playerBottomRight = player.getBottomRight();
+				    let minPlayerX = min(playerTopLeft.x, playerBottomRight.x);
+				    let maxPlayerX = max(playerTopLeft.x, playerBottomRight.x);
+				    let minPlayerY = min(playerTopLeft.y, playerBottomRight.y);
+				    let maxPlayerY = max(playerTopLeft.y, playerBottomRight.y);
 				    // if (!collide(player, block)) return;
-				    if (playerTopLeft.y == blockTopLeft.y) {
-				        if (playerBottomRight.x - blockTopLeft.x <= block.width &&
-				            playerBottomRight.x - blockTopLeft.x >= block.minX) {
-				            block.minX = playerBottomRight.x - blockTopLeft.x;
+				    if (minPlayerY == blockTopLeft.y) {
+				        if (maxPlayerX - blockTopLeft.x <= block.width &&
+				            maxPlayerX - blockTopLeft.x >= block.minX) {
+				            block.minX = maxPlayerX - blockTopLeft.x;
 				        }
-				        if (playerTopLeft.x - blockTopLeft.x >= 0 && 
-				            playerTopLeft.x - blockTopLeft.x <= block.maxX) {
-				            block.maxX = playerTopLeft.x - blockTopLeft.x;
+				        if (minPlayerX - blockTopLeft.x >= 0 && 
+				            minPlayerX - blockTopLeft.x <= block.maxX) {
+				            block.maxX = minPlayerX - blockTopLeft.x;
 				        }
 				    }
 				   
- 				    if (playerTopLeft.x == blockTopLeft.x) {
-				        if (playerBottomRight.y - blockTopLeft.y <= block.height && 
-				            playerBottomRight.y - blockTopLeft.y >= block.minY) {
-				            block.minY = playerBottomRight.y - blockTopLeft.y;
+ 				    if (minPlayerX == blockTopLeft.x) {
+				        if (maxPlayerY - blockTopLeft.y <= block.height && 
+				            maxPlayerY - blockTopLeft.y >= block.minY) {
+				            block.minY = maxPlayerY - blockTopLeft.y;
 				        }
-				        if (playerTopLeft.y - blockTopLeft.y >= 0 && 
-				            playerTopLeft.y - blockTopLeft.y <= block.maxY) {
-				            block.maxY = playerTopLeft.y - blockTopLeft.y;
+				        if (minPlayerY - blockTopLeft.y >= 0 && 
+				            minPlayerY - blockTopLeft.y <= block.maxY) {
+				            block.maxY = minPlayerY - blockTopLeft.y;
 				        }
 				    }
 				    block.setCrop(

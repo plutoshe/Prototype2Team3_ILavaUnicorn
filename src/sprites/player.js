@@ -25,6 +25,7 @@ export class Player {
 			config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
 			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
 			"player_idle");
+		this.sprite.play("player_idle");     
 		// console.log(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
 
 	    this.sprite.setScale(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
@@ -76,7 +77,8 @@ export class Player {
 	            this.sprite.setVelocityX(0);
 	            this.sprite.x = this.dstx;
 	            this.sprite.y = this.dsty;   
-	            this.sprite.setTexture("player_idle");      
+	            this.sprite.setTexture("player_idle"); 
+	            this.sprite.play("player_idle");     
 	            this.bx = Math.floor(this.sprite.x / this.backgroundCellWidth);
 				this.by = Math.floor(this.sprite.y / this.backgroundCellHeight);
 				if ( this.scene.background.blocks["full"][bx][by] != null) 
@@ -97,6 +99,7 @@ export class Player {
 	        this.sprite.angle = 0;
 	        this.sprite.flipX = true;
 	        this.sprite.setTexture("player_move");
+	        this.sprite.play("player_move");
 	    } 
 	    else if (this.scene.cursors['left'].isDown && 
 	    	  	 this.couldGo(this.bx - 1, this.by))
@@ -109,6 +112,7 @@ export class Player {
 	        this.sprite.angle = 0;
 	        this.sprite.flipX = false;
 	        this.sprite.setTexture("player_move");
+	        this.sprite.play("player_move");
 	    } 
 	    else if (this.scene.cursors['up'].isDown && 
 	    		 this.couldGo(this.bx, this.by - 1))
@@ -122,6 +126,7 @@ export class Player {
 	        this.sprite.flipX = false;
 	        this.sprite.flipY = false;
 	        this.sprite.setTexture("player_move");
+	        this.sprite.play("player_move");
 	    } else
 	    if (this.scene.cursors['down'].isDown && 
 	    	this.couldGo(this.bx, this.by + 1))
@@ -135,10 +140,12 @@ export class Player {
 	        this.sprite.flipX = false;
 	        this.sprite.flipY = false;
 	        this.sprite.setTexture("player_move");
+	        this.sprite.play("player_move");
 	    } else {
 	        this.sprite.setVelocityX(0);
 	        this.sprite.setVelocityY(0);
 	        this.sprite.setTexture("player_idle");
+	        this.sprite.play("player_idle");
 	    }
 	}
 

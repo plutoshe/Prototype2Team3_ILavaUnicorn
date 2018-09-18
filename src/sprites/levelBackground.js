@@ -64,6 +64,9 @@ export class LevelBackground {
                     this.leftTopX + ex * this.blockTextureWidth + this.blockTextureWidth / 2, 
                     this.leftTopY + ey * this.blockTextureHeight + this.blockTextureHeight / 2, 
                     entityTexture.texture);
+            if (entityTexture.animation) {
+                block.play(entityTexture.animation);
+            }
             block.setScale(this.blockTextureWidth / block.width, this.blockTextureHeight / block.height);
             blocksArr[ex][ey] = block; 
             this.entityMap[ex][ey] = entityTexture.group;

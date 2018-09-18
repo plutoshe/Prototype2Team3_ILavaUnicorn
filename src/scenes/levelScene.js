@@ -76,8 +76,9 @@ let entityTextures = [
     {
         group: "knight",
         texture: "knight",
+        animation: "knight",
         backgroundBlockGroup: "empty",
-        pos: [[10, 8]],
+        pos: [[5, 6], [4, 6]],
     },
 ]
 
@@ -120,7 +121,8 @@ let backgroundConfig = {
 let playerConfig = {
     x: 0,
     y: 5,
-    playerTexture: 'star',
+    player_idle_texture: 'player_idle',
+    player_move_texture: "player_move",
     cameraBoundry: 2,
 }
 
@@ -134,13 +136,14 @@ function preload ()
     this.load.image('empty', 'assets/empty.png');
 
 
-    this.load.image("knight", "assets/bomb.png");
+    // this.load.image("knight", "assets/bomb.png");
     this.load.image("rock_static", "assets/rock_static.png")
     this.load.spritesheet('rock_shaking', 'assets/rock_shaking.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('rock_broken', 'assets/rock_broken.png', { frameWidth: 64, frameHeight: 64 });
-
+    this.load.spritesheet('knight', 'assets/knight.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('player_idle', 'assets/player_idle.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('player_move', 'assets/player_movement.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('player_attack', 'assets/hammer.png', { frameWidth: 128, frameHeight: 128 });
 
     this.background = new LevelBackground();
     this.player = new Player();
@@ -162,7 +165,17 @@ function create ()
         frames: this.anims.generateFrameNumbers('player_move'),
         frameRate: 10,
     });
-
+    this.anims.create({
+        key: 'player_attach',
+        frames: this.anims.generateFrameNumbers('player_attach'),
+        frameRate: 10,
+    });
+    this.anims.create({
+        key: 'knight',
+        frames: this.anims.generateFrameNumbers('knight'),
+        frameRate: 10,
+        repeat: -1,
+    });
     this.anims.create({
         key: 'rock_shaking',
         frames: this.anims.generateFrameNumbers('rock_shaking'),
