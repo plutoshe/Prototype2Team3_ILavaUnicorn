@@ -2,7 +2,8 @@
 export class Lava {     
     constructor()
     {
-        
+        this.timer = 0;
+        this.pastT = 0;
     }
     
     create(config)
@@ -13,15 +14,29 @@ export class Lava {
         this.lavaTileIndex = config.lavaTileIndex; // here, it'll be 4 or something
 		
         this.spreadSpeed = config.spreadSpeed;
+        this.d = new Date();
 
         this.findLavaBlocks();
     }
 
     update()
     {
-        this.floodFill();
-        this.findLavaBlocks()
-        console.log(this.blocks.length);
+        /*if(this.timer > 0)
+        {
+            var t = this.d.getMilliseconds();
+            this.timer = this.timer - (t - this.pastT);
+        }
+        else*/
+        {
+            this.timer = this.spreadSpeed;
+            this.gravityFill();
+            
+            // this line is killing performance.
+            //this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
+            //console.log(this.blocks.length);
+        }
+        this.pastT = this.d.getMilliseconds();
+        //console.log(this.timer);
 	}
 	
 	floodFill()
@@ -33,7 +48,7 @@ export class Lava {
             if(this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] == 0)
             {
                 this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
-                this.background.blocks["full_red"][lavaBlock[0]][lavaBlock[1]].setTexture("full_red");
+                this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
             }    
 
             if(this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] == 0)
@@ -45,23 +60,39 @@ export class Lava {
             if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] - 1] == 0)
                 this.background.levelMap[lavaBlock[0]][lavaBlock[1] - 1] = this.lavaTileIndex;
         }
+        //console.log(this.background.blockTextures);
     }
 
     gravityFill()
 	{
         var i;
+        var didSomething = false;
         for(i = 0; i < this.blocks.length; i++)
         {
             var lavaBlock = this.blocks[i];
             if(this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] == 0)
+            {
                 this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
+                this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
+                didSomething = true;
+            }
 
             if(this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] == 0)
+            {
                 this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] = this.lavaTileIndex;
-
-            if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] - 1] == 0)
-                this.background.levelMap[lavaBlock[0]][lavaBlock[1] - 1] = this.lavaTileIndex;
+                this.blocks.push([lavaBlock[0] - 1,lavaBlock[1]]);
+                didSomething = true;
+            }
+            
+            if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] == 0)
+            {
+                this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] = this.lavaTileIndex;
+                this.blocks.push([lavaBlock[0],lavaBlock[1] + 1]);
+                didSomething = true;
+            }
         }
+        if(didSomething)
+            this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
 	}
 
     findLavaBlocks()

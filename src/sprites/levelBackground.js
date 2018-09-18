@@ -161,7 +161,7 @@ export class LevelBackground {
             background: this,
             scene: this.scene,
             lavaTileIndex: 2,
-            spreadSpeed: 5
+            spreadSpeed: 5000
         }
         this.lava.create(lavaConfig);
 
