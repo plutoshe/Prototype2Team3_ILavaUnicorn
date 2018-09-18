@@ -258,6 +258,12 @@ function create ()
         collisionHandlers["collision"]["player"]["rock"]);
 
     this.physics.add.overlap(
+        this.background.blockGroups["knight"],
+        this.background.blockGroups["rock"],
+        collisionHandlers["collision"]["knight"]["rock"]);
+
+
+    this.physics.add.overlap(
         this.player.sprite,
         this.player.attack,
         collisionHandlers["overlap"]["player"]["player_attack"]);

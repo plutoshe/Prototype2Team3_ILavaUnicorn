@@ -133,6 +133,14 @@ var collisionHandlers = {
 	    			}
     			}
     	},
+    	"knight": {
+    		"rock":
+    			function (knight,rock) {
+    				if (rock.status == "falling") {
+    					knight.disableBody(true, true);
+    				}
+    			}
+    	}
 	},
 
     }
