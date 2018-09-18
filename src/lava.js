@@ -13,6 +13,7 @@ export class Lava {
         this.lavaTileIndex = config.lavaTileIndex; // here, it'll be 4 or something
 		
         this.spreadSpeed = config.spreadSpeed;
+        this.lavaContent = 3;
         this.d = new Date();
 
         this.findLavaBlocks();
@@ -27,25 +28,59 @@ export class Lava {
 	floodFill()
 	{
         var i;
+        var didSomething = false;
         for(i = 0; i < this.blocks.length; i++)
         {
             var lavaBlock = this.blocks[i];
             if(this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] == 0)
             {
                 this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
-                this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
-            }    
+                if(!checkTupleInArray(this.blocks,[lavaBlock[0] + 1,lavaBlock[1]]))
+                {
+                    this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
+                    didSomething = true;
+                }
+                console.log(this.blocks);
+            }
+            if(lavaBlock[0] > 0)
+                if(this.background.levelMap [ lavaBlock[0] - 1 ] [ lavaBlock[1] ] == 0)
+                {
+                    this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] = this.lavaTileIndex;
+                    if(!checkTupleInArray(this.blocks,[lavaBlock[0] - 1,lavaBlock[1]]))
+                    {
+                        this.blocks.push([lavaBlock[0] - 1,lavaBlock[1]]);
+                        didSomething = true;
+                    }
+                    console.log(this.blocks);
+                }
 
-            if(this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] == 0)
-                this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] = this.lavaTileIndex;
-
+            if(lavaBlock[1] > 0)
+                if(this.background.levelMap [ lavaBlock[0]] [ lavaBlock[1] - 1] == 0)
+                {
+                    this.background.levelMap[lavaBlock[0]][lavaBlock[1] - 1] = this.lavaTileIndex;
+                    if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] -1]))
+                    {
+                        this.blocks.push([lavaBlock[0],lavaBlock[1] - 1]);
+                        didSomething = true;
+                    }
+                    console.log(this.blocks);
+                }
+            
             if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] == 0)
+            {
                 this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] = this.lavaTileIndex;
-
-            if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] - 1] == 0)
-                this.background.levelMap[lavaBlock[0]][lavaBlock[1] - 1] = this.lavaTileIndex;
+                if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] + 1]))
+                {
+                    this.blocks.push([lavaBlock[0],lavaBlock[1] + 1]);
+                    didSomething = true;
+                }
+                console.log(this.blocks);
+            }
         }
-        //console.log(this.background.blockTextures);
+        if(didSomething)
+        {
+            this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
+        }   
     }
 
     gravityFill()

@@ -39,9 +39,9 @@ let blockTextures = {
     },
     2 : {
         group: "full_red",
-        texture: "full_red",
+        texture: "lava",//full_red
         createFunction: function(v) {
-            if (v.texture == "full_red") 
+            if (v.texture == "lava") 
                 return true;
             else return false;
         }
@@ -131,6 +131,7 @@ function preload ()
     this.load.image('full_orange', 'assets/FullTile_7.png');
     this.load.image('full_red', 'assets/FullTile_2.png');
     this.load.image('full_pink', 'assets/FullTile_3.png');
+    this.load.image('lava', 'assets/MagmaTiled.png');
     this.load.image('empty', 'assets/empty.png');
     this.load.image("knight", "assets/bomb.png")
     this.load.image("rock_static", "assets/rock_static.png")
