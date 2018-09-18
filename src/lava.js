@@ -21,22 +21,12 @@ export class Lava {
 
     update()
     {
-        /*if(this.timer > 0)
-        {
-            var t = this.d.getMilliseconds();
-            this.timer = this.timer - (t - this.pastT);
-        }
-        else*/
-        {
-            this.timer = this.spreadSpeed;
-            this.gravityFill();
-            
-            // this line is killing performance.
-            //this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
-            //console.log(this.blocks.length);
-        }
-        this.pastT = this.d.getMilliseconds();
-        //console.log(this.timer);
+
+        this.gravityFill();
+        //this.findLavaBlocks();
+        // this line is killing performance.
+        //this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
+        console.log(this.blocks.length);
 	}
 	
 	floodFill()
@@ -73,26 +63,32 @@ export class Lava {
             if(this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] == 0)
             {
                 this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
-                this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
+                if(!checkTupleInArray(this.blocks,[lavaBlock[0] + 1,lavaBlock[1]]))
+                    this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
+                console.log(this.blocks);
                 didSomething = true;
             }
 
-            if(this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] == 0)
+            if(this.background.levelMap [ lavaBlock[0] - 1 ] [ lavaBlock[1] ] == 0)
             {
                 this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] = this.lavaTileIndex;
-                this.blocks.push([lavaBlock[0] - 1,lavaBlock[1]]);
+                if(!checkTupleInArray(this.blocks,[lavaBlock[0] - 1,lavaBlock[1]]))
+                    this.blocks.push([lavaBlock[0] - 1,lavaBlock[1]]);
+                console.log(this.blocks);
                 didSomething = true;
             }
             
             if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] == 0)
             {
                 this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] = this.lavaTileIndex;
-                this.blocks.push([lavaBlock[0],lavaBlock[1] + 1]);
+                if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] + 1]))
+                    this.blocks.push([lavaBlock[0],lavaBlock[1] + 1]);
+                console.log(this.blocks);
                 didSomething = true;
             }
         }
-        if(didSomething)
-            this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
+        //if(didSomething)
+        //    this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
 	}
 
     findLavaBlocks()
@@ -103,6 +99,35 @@ export class Lava {
         for(i=0;i < this.background.blockWidth; i++)
             for(j=0;j < this.background.blockHeight; j++)
                 if(this.background.levelMap[i][j] == this.lavaTileIndex)
-                    this.blocks.push([i,j]);
+                    if(!checkTupleInArray(this.blocks,[i,j]))
+                    {
+                        this.blocks.push([i,j]);
+                        console.log("Lava Block at " + i + ", "+ j);
+                    }
     }
+}
+
+function compareTuples(a1,a2)
+{
+    if(a1[0] != a2[0])
+        return false;
+    if(a1[1] != a2[1])
+        return false;
+    return true;
+}
+
+function checkTupleInArray(arr,t)
+{
+    var i;
+    for(i = 0; i < arr.length; i++)
+    {
+        var x = arr[i];
+        if(compareTuples(x,t))
+        {
+            //console.log("duplicate");
+            return true;
+        }
+            
+    }
+    return false;
 }
