@@ -75,7 +75,7 @@ export class Lava {
                     {
                         this.addNewLavaBlock(lavaBlock[0] + 1,lavaBlock[1]);
                     }
-                    //console.log(this.blocks);
+                    console.log(this.blocks);
                 }
             if(lavaBlock[0] > 0)
                 if(this.background.levelMap [ lavaBlock[0] - 1 ] [ lavaBlock[1] ] == 0)
@@ -85,7 +85,7 @@ export class Lava {
                     {
                         this.addNewLavaBlock(lavaBlock[0] - 1,lavaBlock[1]);
                     }
-                    //console.log(this.blocks);
+                    console.log(this.blocks);
                 }
             if(lavaBlock[1] > 0)
                 if(this.background.levelMap [ lavaBlock[0] ] [ lavaBlock[1] - 1 ] == 0)
@@ -95,7 +95,7 @@ export class Lava {
                     {
                         this.addNewLavaBlock(lavaBlock[0],lavaBlock[1] - 1);
                     }
-                    //console.log(this.blocks);
+                    console.log(this.blocks);
                 }
             if(lavaBlock[1]+1 < this.background.blockHeight)
                 if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] == 0)
@@ -105,7 +105,7 @@ export class Lava {
                     {
                         this.addNewLavaBlock(lavaBlock[0],lavaBlock[1] + 1);
                     }
-                    //console.log(this.blocks);
+                    console.log(this.blocks);
                 }
         }
     }
@@ -178,9 +178,4 @@ function checkTupleInArray(arr,t)
             
     }
     return false;
-}
-
-var update = function(lava)
-{
-    lava.gravityFill();
 }
