@@ -165,7 +165,7 @@ export class LevelBackground {
         let lavaConfig = {
             background: this,
             scene: this.scene,
-            lavaTileIndex: 5,
+            lavaTileIndex: 13,
             spreadSpeed: 5000,
             lavaContent: 3
         }
