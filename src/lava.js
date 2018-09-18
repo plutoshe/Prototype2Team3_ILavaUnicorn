@@ -38,7 +38,7 @@ export class Lava {
 	{
         var i;
         var didSomething = false;
-        console.log(this.blocks);
+        //console.log(this.blocks);
         var count = this.blocks.length;
         for(i = 0; i < count; i++)
         {
@@ -52,7 +52,7 @@ export class Lava {
                         this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
                         didSomething = true;
                     }
-                    console.log(this.blocks);
+                    //console.log(this.blocks);
                 }
             if(lavaBlock[0] > 0)
                 if(this.background.levelMap [ lavaBlock[0] - 1 ] [ lavaBlock[1] ] == 0)
@@ -63,7 +63,7 @@ export class Lava {
                         this.blocks.push([lavaBlock[0] - 1,lavaBlock[1]]);
                         didSomething = true;
                     }
-                    console.log(this.blocks);
+                    //console.log(this.blocks);
                 }
             if(lavaBlock[1] > 0)
                 if(this.background.levelMap [ lavaBlock[0] ] [ lavaBlock[1] - 1 ] == 0)
@@ -74,7 +74,7 @@ export class Lava {
                         this.blocks.push([lavaBlock[0],lavaBlock[1] - 1 ]);
                         didSomething = true;
                     }
-                    console.log(this.blocks);
+                    //console.log(this.blocks);
                 }
             if(lavaBlock[1]+1 < this.background.blockHeight)
                 if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] == 0)
@@ -85,12 +85,13 @@ export class Lava {
                         this.blocks.push([lavaBlock[0],lavaBlock[1] + 1]);
                         didSomething = true;
                     }
-                    console.log(this.blocks);
+                    //console.log(this.blocks);
                 }
         }
         if(didSomething)
         {
             this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
+            //addTexture(this.background.blockTextures[this.lavaTileIndex], this.background, this.blocks);
         }    
     }
 
@@ -187,4 +188,12 @@ function checkTupleInArray(arr,t)
 var update = function(lava)
 {
     lava.gravityFill();
+}
+
+var addTexture = function(blockTexture,background,lavaBlocks)
+{
+    var i;
+    for(i=0; i < lavaBlocks.length; i++)    
+        blockTexture.createFunction(
+                background.getLevelMapTexture(lavaBlocks[i][0], lavaBlocks[i][1]));
 }
