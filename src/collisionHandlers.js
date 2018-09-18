@@ -72,7 +72,11 @@ var collisionHandlers = {
 			"knight":
 				function rescueKnight(player, knight) {
 					knight.destroy();
-				}
+				},
+			"enemy":
+				function encounterEnemy(player, enemy) {
+					player.disableBody(true, true);
+				},
 		},
 		
 		"enemy": {
@@ -104,11 +108,6 @@ var collisionHandlers = {
 				            block.maxY = playerTopLeft.y - blockTopLeft.y;
 				        }
 				    }
-				    /*block.setCrop(
-				        block.minX / block.scaleX, 
-				        block.minY / block.scaleY, 
-				        (block.maxX - block.minX) / block.scaleX, 
-				        (block.maxY - block.minY) / block.scaleY);*/
 				    
 				}
         },

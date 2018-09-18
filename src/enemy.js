@@ -24,6 +24,9 @@ export class Enemy {
 			config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
 			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
 			config.playerTexture);
+		if (config.isAnimation) {
+			this.sprite.play(config.playerTexture);
+		}
 		// console.log(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
 
 	    this.sprite.setScale(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);

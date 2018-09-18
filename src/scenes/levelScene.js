@@ -64,6 +64,15 @@ let blockTextures = {
             else return false;
         }
     },
+    5: {
+        group: "lava",
+        texture: "lava",
+        createFunction: function(v) {
+            if (v.texture == "lava") 
+                return true;
+            else return false;
+        }
+    }
 }
 
 let entityTextures = [
@@ -103,8 +112,8 @@ let backgroundConfig = {
         [2,2,2,2,2,2,2,2,2,2,2,2,2,2],
         [2,2,2,2,0,0,2,2,2,2,0,0,2,2],
         [3,3,3,3,0,0,3,3,3,3,0,0,3,3],
-        [3,3,3,3,3,3,3,3,3,3,0,0,3,3],
-        [3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+        [3,3,3,3,3,3,3,3,3,3,0,0,5,5],
+        [5,3,3,3,3,3,3,3,3,3,3,3,3,5],
         [3,3,3,3,3,3,3,3,3,3,3,3,3,3],
         [3,3,3,3,3,3,3,3,3,3,3,3,3,3],
         [3,3,3,3,3,3,3,3,3,3,3,3,3,3],
@@ -134,6 +143,8 @@ function preload ()
     this.load.image('full_orange', 'assets/FullTile_7.png');
     this.load.image('full_red', 'assets/FullTile_2.png');
     this.load.image('full_pink', 'assets/FullTile_3.png');
+
+    this.load.image('lava', 'assets/lava.png');
     this.load.image('empty', 'assets/empty.png');
 
     this.load.image("rock_static", "assets/rock_static.png")
@@ -141,7 +152,7 @@ function preload ()
     this.load.spritesheet('rock_broken', 'assets/rock_broken.png', { frameWidth: 64, frameHeight: 64 });
 
     this.load.spritesheet('knight', 'assets/knight.png', { frameWidth: 128, frameHeight: 128 });
-
+    this.load.spritesheet('enemy1', 'assets/enemy1.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('player_idle', 'assets/player_idle.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('player_move', 'assets/player_movement.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('player_attack', 'assets/hammer.png', { frameWidth: 80, frameHeight: 80 });
@@ -170,6 +181,13 @@ function create ()
         key: 'player_attack',
         frames: this.anims.generateFrameNumbers('player_attack'),
         frameRate: 5,
+        repeat: -1,
+    });
+
+    this.anims.create({
+        key: 'enemy1',
+        frames: this.anims.generateFrameNumbers('enemy1'),
+        frameRate: 3,
         repeat: -1,
     });
     this.anims.create({
@@ -218,23 +236,24 @@ function create ()
         this.background.blocks["full"][this.player.bx][this.player.by].destroy();
 
     // enemy config
-    //  let enemyConfig = {
-    //     scene: this,
-    //     x: 9,
-    //     y: 7,
-    //     playerTexture: 'star',
-    //     backgroundCellWidth: this.background.blockTextureWidth,
-    //     backgroundCellHeight: this.background.blockTextureHeight,
-    //     speed: 50
-    // }   
-    // this.enemy.create(enemyConfig); 
+    let enemyConfig = {
+        scene: this,
+        x: 6,
+        y: 7,
+        playerTexture: 'enemy1',
+        backgroundCellWidth: this.background.blockTextureWidth,
+        backgroundCellHeight: this.background.blockTextureHeight,
+        speed: 50,
+        isAnimation: true,
+    }   
+    this.enemy.create(enemyConfig); 
     
-    // let lavaConfig = {
-    //     scene: this,
-    //     lavaTileIndex: 2,
-    //     spreadSpeed: 5
-    // }
-    // this.lava.create(lavaConfig);
+    let lavaConfig = {
+        scene: this,
+        lavaTileIndex: 5,
+        spreadSpeed: 5
+    }
+    this.lava.create(lavaConfig);
 
     // key binding setting
     this.cursors = this.input.keyboard.addKeys({
@@ -245,6 +264,11 @@ function create ()
         "attack": Phaser.Input.Keyboard.KeyCodes.SPACE});
 
     // conllision setting
+
+    this.physics.add.overlap(
+        this.player.sprite,
+        this.enemy.sprite,
+        collisionHandlers["overlap"]["player"]["enemy"]);
 
     this.physics.add.overlap(
         this.player.sprite,
@@ -269,10 +293,10 @@ function create ()
         collisionHandlers["overlap"]["player"]["player_attack"]);
 
 
-    // this.physics.add.overlap(
-    //     this.enemy.sprite,
-    //     this.background.blockGroups["rock"],
-    //     collisionHandlers["collision"]["enemy"]["rock"]);
+    this.physics.add.overlap(
+        this.enemy.sprite,
+        this.background.blockGroups["rock"],
+        collisionHandlers["collision"]["enemy"]["rock"]);
     
 
     // initialization
