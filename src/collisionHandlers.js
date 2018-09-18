@@ -71,6 +71,9 @@ var collisionHandlers = {
 				},
 			"knight":
 				function rescueKnight(player, knight) {
+					console.log("player meet knight");
+					console.log(Math.abs(knight.x - player.x), player.sensitiveDistance);
+					console.log(Math.abs(knight.y - player.y), player.sensitiveDistance);
 					if (Math.abs(knight.x - player.x) < player.sensitiveDistance &&
 	    				Math.abs(knight.y - player.y) < player.sensitiveDistance) {
 						knight.disableBody(true, true);

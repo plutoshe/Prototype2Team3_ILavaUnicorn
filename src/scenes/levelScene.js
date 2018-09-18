@@ -264,6 +264,8 @@ function create ()
     for (var i in collisionHandlers)
         for (var j in collisionHandlers[i]) {
             for (var k in collisionHandlers[i][j]) {
+                console.log(j,k,collsionObj[j],
+                            collsionObj[k]);
                 this.physics.add.overlap(
                     collsionObj[j],
                     collsionObj[k],
