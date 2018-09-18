@@ -233,7 +233,7 @@ function preload ()
     this.load.spritesheet('rock_shaking', 'assets/rock_shaking.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('rock_broken', 'assets/rock_broken.png', { frameWidth: 64, frameHeight: 64 });
 
-    this.load.spritesheet('knight', 'assets/knight.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('knight', 'assets/unicorn.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('enemy1', 'assets/enemy1.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('player_idle', 'assets/player_idle.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('player_move', 'assets/player_movement.png', { frameWidth: 128, frameHeight: 128 });

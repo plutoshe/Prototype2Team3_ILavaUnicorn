@@ -60,6 +60,7 @@ export class Lava {
 	
 	floodFill()
 	{
+        var floodFillDirectionArr = [[1,0],[-1,0],[0,1],[0,-1]];
         var i;
         var didSomething = false;
         //console.log(this.blocks);
@@ -67,51 +68,20 @@ export class Lava {
         for(i = 0; i < count; i++)
         {
             var lavaBlock = this.blocks[i];
-            if(lavaBlock[0]+1 < this.background.blockWidth)
-                if(this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] == 0)
-                {
-                    this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
-                    if(!checkTupleInArray(this.blocks,[lavaBlock[0] + 1,lavaBlock[1]]))
-                    {
-                        this.addNewLavaBlock(lavaBlock[0] + 1,lavaBlock[1]);
-                    }
-                    //console.log(this.blocks);
-                }
-            if(lavaBlock[0] > 0)
-                if(this.background.levelMap [ lavaBlock[0] - 1 ] [ lavaBlock[1] ] == 0)
-                {
-                    this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] = this.lavaTileIndex;
-                    if(!checkTupleInArray(this.blocks,[lavaBlock[0] - 1,lavaBlock[1]]))
-                    {
-                        this.addNewLavaBlock(lavaBlock[0] - 1,lavaBlock[1]);
-                    }
-                    //console.log(this.blocks);
-                }
-            if(lavaBlock[1] > 0)
-                if(this.background.levelMap [ lavaBlock[0] ] [ lavaBlock[1] - 1 ] == 0)
-                {
-                    this.background.levelMap[lavaBlock[0]][lavaBlock[1] - 1] = this.lavaTileIndex;
-                    if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] - 1]))
-                    {
-                        this.addNewLavaBlock(lavaBlock[0],lavaBlock[1] - 1);
-                    }
-                    //console.log(this.blocks);
-                }
-            if(lavaBlock[1]+1 < this.background.blockHeight)
-                if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] == 0)
-                {
-                    this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] = this.lavaTileIndex;
-                    if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] + 1]))
-                    {
-                        this.addNewLavaBlock(lavaBlock[0],lavaBlock[1] + 1);
-                    }
-                    //console.log(this.blocks);
-                }
+            for (var j in floodFillDirectionArr) {
+                var nx = lavaBlock[0] + floodFillDirectionArr[j][0];
+                var ny = lavaBlock[1] + floodFillDirectionArr[j][1];
+                if (nx >= 0 && nx < this.background.blockWidth &&
+                    ny >= 0 && ny < this.background.blockHeight &&
+                    !this.checkTupleInArray(nx, ny) && this.background.levelMap[nx][ny] == 0)
+                    this.addNewLavaBlock(nx,ny);
+            }
         }
     }
 
     gravityFill()
 	{
+        var floodFillDirectionArr = [[1,0],[-1,0],[0,1]];
         var i;
         var didSomething = false;
         console.log(this.blocks);
@@ -119,66 +89,35 @@ export class Lava {
         for(i = 0; i < count; i++)
         {
             var lavaBlock = this.blocks[i];
-            if(lavaBlock[0]+1 < this.background.blockWidth)
-                if(this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] == 0)
-                {
-                    this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
-                    if(!checkTupleInArray(this.blocks,[lavaBlock[0] + 1,lavaBlock[1]]))
-                    {
-                        this.addNewLavaBlock(lavaBlock[0] + 1,lavaBlock[1]);
-                    }
-                    console.log(this.blocks);
-                }
-            if(lavaBlock[0] > 0)
-                if(this.background.levelMap [ lavaBlock[0] - 1 ] [ lavaBlock[1] ] == 0)
-                {
-                    this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] = this.lavaTileIndex;
-                    if(!checkTupleInArray(this.blocks,[lavaBlock[0] - 1,lavaBlock[1]]))
-                    {
-                        this.addNewLavaBlock(lavaBlock[0] - 1,lavaBlock[1]);
-                    }
-                    console.log(this.blocks);
-                }
-            if(lavaBlock[1]+1 < this.background.blockHeight)
-                if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] == 0)
-                {
-                    this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] = this.lavaTileIndex;
-                    if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] + 1]))
-                    {
-                        this.addNewLavaBlock(lavaBlock[0],lavaBlock[1] + 1);
-                    }
-                    console.log(this.blocks);
-                }
+            for (var j in floodFillDirectionArr) {
+                var nx = lavaBlock[0] + floodFillDirectionArr[j][0];
+                var ny = lavaBlock[1] + floodFillDirectionArr[j][1];
+                if (nx >= 0 && nx < this.background.blockWidth &&
+                    ny >= 0 && ny < this.background.blockHeight &&
+                    !this.checkTupleInArray(nx, ny) && this.background.levelMap[nx][ny] == 0)
+                    this.addNewLavaBlock(nx,ny);
+            }
         }
 	}
 
-
-}
-
-function compareTuples(a1,a2)
-{
-    if(a1[0] != a2[0])
-        return false;
-    if(a1[1] != a2[1])
-        return false;
-    return true;
-}
-
-function checkTupleInArray(arr,t)
-{
-    var i;
-    for(i = 0; i < arr.length; i++)
+    compareTuples(a1,a2)
     {
-        var x = arr[i];
-        if(compareTuples(x,t))
-        {
-            //console.log("duplicate");
-            return true;
-        }
-            
+        if(a1[0] != a2[0])
+            return false;
+        if(a1[1] != a2[1])
+            return false;
+        return true;
     }
-    return false;
+
+    checkTupleInArray(x,y)
+    {
+        if (this.blocksArr[x][y]) return true;
+       
+        return false;
+    }
+
 }
+
 
 var update = function(lava)
 {
