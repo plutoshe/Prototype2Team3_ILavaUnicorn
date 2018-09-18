@@ -2,8 +2,7 @@
 export class Lava {     
     constructor()
     {
-        this.timer = 0;
-        this.pastT = 0;
+        
     }
     
     create(config)
@@ -21,12 +20,8 @@ export class Lava {
 
     update()
     {
-
         this.gravityFill();
-        //this.findLavaBlocks();
-        // this line is killing performance.
-        //this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
-        console.log(this.blocks.length);
+        //this.floodFill();
 	}
 	
 	floodFill()
@@ -64,31 +59,39 @@ export class Lava {
             {
                 this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
                 if(!checkTupleInArray(this.blocks,[lavaBlock[0] + 1,lavaBlock[1]]))
+                {
                     this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
+                    didSomething = true;
+                }
                 console.log(this.blocks);
-                didSomething = true;
             }
-
-            if(this.background.levelMap [ lavaBlock[0] - 1 ] [ lavaBlock[1] ] == 0)
-            {
-                this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] = this.lavaTileIndex;
-                if(!checkTupleInArray(this.blocks,[lavaBlock[0] - 1,lavaBlock[1]]))
-                    this.blocks.push([lavaBlock[0] - 1,lavaBlock[1]]);
-                console.log(this.blocks);
-                didSomething = true;
-            }
+            if(lavaBlock[0] > 0)
+                if(this.background.levelMap [ lavaBlock[0] - 1 ] [ lavaBlock[1] ] == 0)
+                {
+                    this.background.levelMap[lavaBlock[0] - 1][lavaBlock[1]] = this.lavaTileIndex;
+                    if(!checkTupleInArray(this.blocks,[lavaBlock[0] - 1,lavaBlock[1]]))
+                    {
+                        this.blocks.push([lavaBlock[0] - 1,lavaBlock[1]]);
+                        didSomething = true;
+                    }
+                    console.log(this.blocks);
+                }
             
             if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] == 0)
             {
                 this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] = this.lavaTileIndex;
                 if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] + 1]))
+                {
                     this.blocks.push([lavaBlock[0],lavaBlock[1] + 1]);
+                    didSomething = true;
+                }
                 console.log(this.blocks);
-                didSomething = true;
             }
         }
-        //if(didSomething)
-        //    this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
+        if(didSomething)
+        {
+            this.background.addBlockTextureGroup(this.background.blockTextures[this.lavaTileIndex]);
+        }    
 	}
 
     findLavaBlocks()
