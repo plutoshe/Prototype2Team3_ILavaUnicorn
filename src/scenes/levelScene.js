@@ -122,7 +122,8 @@ let playerConfig = {
     x: 0,
     y: 5,
     player_idle_texture: 'player_idle',
-    player_move_texture: "player_move",
+    player_move_texture: 'player_move',
+    attack_texture: 'player_attack',
     cameraBoundry: 2,
 }
 
@@ -135,15 +136,15 @@ function preload ()
     this.load.image('full_pink', 'assets/FullTile_3.png');
     this.load.image('empty', 'assets/empty.png');
 
-
-    // this.load.image("knight", "assets/bomb.png");
     this.load.image("rock_static", "assets/rock_static.png")
     this.load.spritesheet('rock_shaking', 'assets/rock_shaking.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('rock_broken', 'assets/rock_broken.png', { frameWidth: 64, frameHeight: 64 });
+
     this.load.spritesheet('knight', 'assets/knight.png', { frameWidth: 128, frameHeight: 128 });
+
     this.load.spritesheet('player_idle', 'assets/player_idle.png', { frameWidth: 128, frameHeight: 128 });
     this.load.spritesheet('player_move', 'assets/player_movement.png', { frameWidth: 128, frameHeight: 128 });
-    this.load.spritesheet('player_attack', 'assets/hammer.png', { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('player_attack', 'assets/hammer.png', { frameWidth: 80, frameHeight: 80 });
 
     this.background = new LevelBackground();
     this.player = new Player();
@@ -158,22 +159,23 @@ function create ()
     this.anims.create({
         key: 'player_idle',
         frames: this.anims.generateFrameNumbers('player_idle'),
-        frameRate: 10,
+        frameRate: 5,
     });
     this.anims.create({
         key: 'player_move',
         frames: this.anims.generateFrameNumbers('player_move'),
-        frameRate: 10,
+        frameRate: 5,
     });
     this.anims.create({
-        key: 'player_attach',
-        frames: this.anims.generateFrameNumbers('player_attach'),
-        frameRate: 10,
+        key: 'player_attack',
+        frames: this.anims.generateFrameNumbers('player_attack'),
+        frameRate: 5,
+        repeat: -1,
     });
     this.anims.create({
         key: 'knight',
         frames: this.anims.generateFrameNumbers('knight'),
-        frameRate: 10,
+        frameRate: 3,
         repeat: -1,
     });
     this.anims.create({
@@ -240,8 +242,7 @@ function create ()
         "down": Phaser.Input.Keyboard.KeyCodes.DOWN,
         "left": Phaser.Input.Keyboard.KeyCodes.LEFT,
         "right": Phaser.Input.Keyboard.KeyCodes.RIGHT,
-        "space": Phaser.Input.Keyboard.KeyCodes.SPACE,
-        "attack": Phaser.Input.Keyboard.KeyCodes.J});
+        "attack": Phaser.Input.Keyboard.KeyCodes.SPACE});
 
     // conllision setting
     // console.log(collisionHandlers["collision"]["player"]["rock"]);

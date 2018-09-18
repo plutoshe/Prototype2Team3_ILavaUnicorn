@@ -26,6 +26,18 @@ export class Player {
 			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
 			"player_idle");
 		this.sprite.play("player_idle");     
+		this.attack = this.scene.physics.add.sprite(
+			-1,-1,"player_attack");
+		
+		this.attack.setScale(this.backgroundCellWidth / this.attack.width, this.backgroundCellHeight / this.attack.height);
+		this.attack.setVisible(false);
+		this.attack.distanceX = 3 * this.backgroundCellWidth;
+		this.attack.distanceY = 3 * this.backgroundCellHeight;
+		this.attack.boundryMinX = this.backgroundCellWidth / 4;
+    	this.attack.boundryMaxX = this.scene.background.canvasWidth - this.backgroundCellWidth / 4;
+    	this.attack.boundryMinY = this.backgroundCellHeight / 4;
+    	this.attack.boundryMaxY = this.scene.background.canvasHeight - this.backgroundCellHeight / 4;
+    	
 		// console.log(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
 
 	    this.sprite.setScale(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
@@ -57,11 +69,36 @@ export class Player {
 	update() {
 		var playerTopLeft = this.sprite.getTopLeft();
     	var playerBottomRight = this.sprite.getBottomRight();
-    	// if (this.scene.cursors['attack']) {
-    	// 	this.attack.setVisible(true);
-    	// 	this.attack.x = this.sprite.x;
-    	// 	this.attack.y = this.sprite.y;
-    	// }
+    	if (this.scene.cursors['attack'].isDown && !this.attack.visible) {
+    		this.attack.setVisible(true);
+    		this.attack.ox = this.sprite.x;
+    		this.attack.oy = this.sprite.y;
+    		this.attack.x = this.sprite.x;
+    		this.attack.y = this.sprite.y;
+    		this.attack.angle = this.sprite.angle;
+    		this.attack.flipX = this.sprite.flipX;
+    		this.attack.play('player_attack');
+    		this.attack.vx = 0;
+    		this.attack.vy = 0;
+    		this.attack.isRecycle = false;
+    		if (this.attack.angle != 0) this.attack.vy = 180; else this.attack.vx = 180;
+    		if (!this.attack.flipX) {
+    			this.attack.vy = -this.attack.vy;
+    			this.attack.vx = -this.attack.vx;
+    		}
+    		this.attack.setVelocity(this.attack.vx, this.attack.vy);
+    	}
+    	console.log(this.attack.y, this.scene.width, this.scene.height, this.backgroundCellHeight / 4);
+    	if (Math.abs(this.attack.ox - this.attack.x) > this.attack.distanceX || 
+    		Math.abs(this.attack.oy - this.attack.y) > this.attack.distanceY || 
+    		this.attack.x < this.attack.boundryMinX || 
+    		this.attack.x > this.attack.boundryMaxX || 
+    		this.attack.y < this.attack.boundryMinY || 
+    		this.attack.y > this.attack.boundryMaxY) {
+    		this.attack.vx = -this.attack.vx;
+    		this.attack.vy = -this.attack.vy;
+    		this.attack.setVelocity(this.attack.vx, this.attack.vy);
+    	} 
 
 	    if (this.oldKey != "") {
 	        var bx = Math.floor(this.dstx / this.backgroundCellWidth);
@@ -124,7 +161,6 @@ export class Player {
 	        this.oldKey = "up";
 	        this.sprite.angle = 90;
 	        this.sprite.flipX = false;
-	        this.sprite.flipY = false;
 	        this.sprite.setTexture("player_move");
 	        this.sprite.play("player_move");
 	    } else
@@ -136,9 +172,8 @@ export class Player {
 	        this.dstx = this.sprite.x;
 	        this.dsty = this.sprite.y + this.scene.background.blockTextureHeight;
 	        this.oldKey = "down";
-	        this.sprite.angle = 270;
-	        this.sprite.flipX = false;
-	        this.sprite.flipY = false;
+	        this.sprite.angle = 90;
+	        this.sprite.flipX = true;
 	        this.sprite.setTexture("player_move");
 	        this.sprite.play("player_move");
 	    } else {

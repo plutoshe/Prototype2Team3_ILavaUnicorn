@@ -122,6 +122,7 @@ export class LevelBackground {
         this.leftTopY = config.leftTopY;
         this.height = config.height;
         this.width = config.width;
+
         this.blockTextures = config.blockTextures;
         this.entityTextures = config.entityTextures;
         this.blockHeight = config.blockHeight;
@@ -132,6 +133,8 @@ export class LevelBackground {
         this.blockTextureWidth = config.width / config.displayBlockWidth;
         this.levelMap = config.levelMap;
         this.entityMap = new2DArray(config.blockWidth, config.blockHeight);
+        this.canvasWidth = this.blockWidth * this.blockTextureWidth;
+        this.canvasHeight = this.blockHeight * this.blockTextureHeight;
         
         this.blockGroups = {};
         this.blocks = {};
