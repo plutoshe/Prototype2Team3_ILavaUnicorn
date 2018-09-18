@@ -14,7 +14,16 @@ export class Lava {
 		
         this.spreadSpeed = config.spreadSpeed;
         this.lavaContent = 3;
+        //this.timer = new Phaser.Timer();
         this.d = new Date();
+        console.log(this.scene.time);
+        this.scene.time.addEvent({
+            delay: 1000,
+            loop: true,
+            callback: this.update,
+            callbackScope: this,
+            args: this
+        });
 
         this.findLavaBlocks();
     }
@@ -87,6 +96,7 @@ export class Lava {
 	{
         var i;
         var didSomething = false;
+        console.log(this.blocks);
         for(i = 0; i < this.blocks.length; i++)
         {
             var lavaBlock = this.blocks[i];
@@ -168,4 +178,9 @@ function checkTupleInArray(arr,t)
             
     }
     return false;
+}
+
+var update = function(lava)
+{
+    lava.gravityFill();
 }

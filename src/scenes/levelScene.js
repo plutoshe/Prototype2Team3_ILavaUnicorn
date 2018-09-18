@@ -131,7 +131,7 @@ function preload ()
     this.load.image('full_orange', 'assets/FullTile_7.png');
     this.load.image('full_red', 'assets/FullTile_2.png');
     this.load.image('full_pink', 'assets/FullTile_3.png');
-    this.load.image('lava', 'assets/MagmaTiled.png');
+    this.load.image('lava', 'assets/MagmaTiledTurned.png');
     this.load.image('empty', 'assets/empty.png');
     this.load.image("knight", "assets/bomb.png")
     this.load.image("rock_static", "assets/rock_static.png")
@@ -191,7 +191,6 @@ function create ()
     this.player.create(playerConfig);    
     if (this.background.blocks["full"][this.player.bx][this.player.by])
         this.background.blocks["full"][this.player.bx][this.player.by].destroy();
-
     // enemy config
      let enemyConfig = {
         scene: this,

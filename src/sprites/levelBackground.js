@@ -207,7 +207,7 @@ export class LevelBackground {
 
             }
         }
-        this.lava.update();
+        //this.lava.update();
     }
         
 }
