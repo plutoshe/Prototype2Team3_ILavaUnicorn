@@ -26,22 +26,19 @@ let blockTextures = {
     },
     1 : {
         group: "full",
-        texture: "full_default",
+        texture: "full_lightbrown",
         createFunction: function(v) {
-            if (v.group == "rock" || v.group == "full") {
-                if (v.group == "full" && v.texture != "full_default") {
-                    return false;
-                }
-                return true;
+            if (v.texture != "full_lightbrown") {
+                return false;
             }
-            else return false;
+                return true;
         }
     },
     2 : {
         group: "full",
-        texture: "full_red",//full_red
+        texture: "full_darkbrown",//full_red
         createFunction: function(v) {
-            if (v.texture == "full_red") 
+            if (v.texture == "full_darkbrown") 
                 return true;
             else return false;
         }
@@ -57,14 +54,86 @@ let blockTextures = {
     },
     4 : {
         group: "full",
-        texture: "full_pink",
+        texture: "full_red",
         createFunction: function(v) {
-            if (v.texture == "full_pink") 
+            if (v.texture == "full_red") 
                 return true;
             else return false;
         }
     },
     5: {
+        group: "full",
+        texture: "full_maroon",
+        createFunction: function (v) {
+            if (v.texture == "full_maroon")
+                return true;
+            else return false;
+        }
+    },
+    6: {
+        group: "full",
+        texture: "full_purple",
+        createFunction: function (v) {
+            if (v.texture == "full_purple")
+                return true;
+            else return false;
+        }
+    },
+    7: {
+        group: "full",
+        texture: "full_pink",
+        createFunction: function (v) {
+            if (v.texture == "full_pink")
+                return true;
+            else return false;
+        }
+    },
+    8: {
+        group: "full",
+        texture: "full_blue",
+        createFunction: function (v) {
+            if (v.texture == "full_blue")
+                return true;
+            else return false;
+        }
+    },
+    9: {
+        group: "full",
+        texture: "full_green",
+        createFunction: function (v) {
+            if (v.texture == "full_green")
+                return true;
+            else return false;
+        }
+    },
+    10: {
+        group: "full",
+        texture: "full_lightgray",
+        createFunction: function (v) {
+            if (v.texture == "full_lightgray")
+                return true;
+            else return false;
+        }
+    },
+    11: {
+        group: "full",
+        texture: "full_darkgray",
+        createFunction: function (v) {
+            if (v.texture == "full_darkgray")
+                return true;
+            else return false;
+        }
+    },
+    12: {
+        group: "full",
+        texture: "full_black",
+        createFunction: function (v) {
+            if (v.texture == "full_black")
+                return true;
+            else return false;
+        }
+    },
+    13: {
         group: "lava",
         texture: "lava",
         createFunction: function(v) {
@@ -72,7 +141,7 @@ let blockTextures = {
                 return true;
             else return false;
         }
-    }
+    },
 }
 
 let entityTextures = [
@@ -99,36 +168,37 @@ let backgroundConfig = {
     displayBlockHeight: 18, 
     blockWidth: 14,
     blockHeight: 29,
+    lavaTileIndex: 13, 
     levelMap: [
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [1,1,1,1,1,1,0,1,1,1,1,1,1,1],
         [1,0,1,1,1,1,0,1,1,0,0,0,0,1],
-        [1,0,1,1,1,1,0,1,1,1,1,1,1,1],
-        [1,0,1,1,1,1,0,1,1,1,1,1,1,1],
-        [1,0,1,1,1,1,0,1,1,1,1,1,1,1],
-        [2,2,2,2,2,2,0,2,2,2,2,2,2,2],
-        [5,2,2,2,2,0,0,0,2,2,2,2,2,5],
-        [2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-        [2,2,2,2,2,2,2,2,2,0,2,2,2,2],
-        [2,2,0,0,0,0,2,2,2,0,2,2,2,2],
-        [2,2,2,2,2,2,2,2,2,0,2,2,2,2],
-        [5,3,3,3,3,3,3,3,3,0,3,3,3,3],
-        [3,3,3,3,3,3,3,3,3,0,3,3,3,3],
-        [3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-        [3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-        [3,3,3,0,3,3,3,3,3,3,5,3,3,3],
-        [3,3,3,0,3,3,3,3,3,3,3,3,3,3],
-        [4,4,4,0,4,4,4,4,4,4,4,4,4,4],
-        [4,4,4,4,4,4,4,4,0,0,0,0,4,4],
+        [2,0,2,2,2,2,0,2,2,2,2,2,2,2],
+        [2,0,2,2,2,2,0,2,2,2,2,2,2,2],
+        [3,0,3,3,3,3,0,3,3,3,3,3,3,3],
+        [3,3,3,3,3,3,0,3,3,3,3,3,3,3],
+        [13,4,4,4,4,0,0,0,4,4,4,4,4,13],
         [4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-        [4,4,4,4,4,4,0,4,4,4,4,4,4,4],
-        [4,4,4,4,4,4,0,4,4,4,4,4,4,4],
-        [4,4,4,5,4,4,0,4,4,4,4,4,4,4],
-        [4,4,4,4,4,4,4,4,4,4,4,4,4,5],
-        [4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-        [4,4,4,4,4,4,4,4,4,4,4,4,4,4]],
+        [5,5,5,5,5,5,5,5,5,0,5,5,5,5],
+        [5,5,0,0,0,0,5,5,5,0,5,5,5,5],
+        [6,6,6,6,6,6,6,6,6,0,6,6,6,6],
+        [13,6,6,6,6,6,6,6,6,0,6,6,6,6],
+        [7,7,7,7,7,7,7,7,7,0,7,7,7,7],
+        [7,7,7,7,7,7,7,7,7,7,7,7,7,7],
+        [8,8,8,8,8,8,8,8,8,8,8,8,8,8],
+        [8,8,8,0,8,8,8,8,8,8,13,8,8,8],
+        [9,9,9,0,9,9,9,9,9,9,9,9,9,9],
+        [9,9,9,0,9,9,9,9,9,9,9,9,9,9],
+        [10,10,10,10,10,10,10,10,0,0,0,0,10,10],
+        [10,10,10,10,10,10,10,10,10,10,10,10,10,10],
+        [11,11,11,11,11,11,0,11,11,11,11,11,11,11],
+        [11,11,11,11,11,11,0,11,11,11,11,11,11,11],
+        [12,12,12,13,12,12,0,12,12,12,12,12,12,12],
+        [12,12,12,12,12,12,12,12,12,12,12,12,12,13],
+        [12,12,12,12,12,12,12,12,12,12,12,12,12,12],
+        [12,12,12,12,12,12,12,12,12,12,12,12,12,12]],
 
 }
 
@@ -144,10 +214,18 @@ let playerConfig = {
 function preload ()
 {
     this.load.image('star', 'assets/star.png');
-    this.load.image('full_default', 'assets/full.png');
+    this.load.image('full_purple', 'assets/full.png');
+    this.load.image('full_lightbrown', 'assets/FullTile_5.png');
+    this.load.image('full_darkbrown', 'assets/FullTile_4.png');
     this.load.image('full_orange', 'assets/FullTile_7.png');
     this.load.image('full_red', 'assets/FullTile_2.png');
     this.load.image('full_pink', 'assets/FullTile_3.png');
+    this.load.image('full_maroon', 'assets/FullTile_14.png');
+    this.load.image('full_blue', 'assets/FullTile_8.png');
+    this.load.image('full_green', 'assets/FullTile_15.png');
+    this.load.image('full_lightgray', 'assets/FullTile_13.png');
+    this.load.image('full_darkgray', 'assets/FullTile_11.png');
+    this.load.image('full_black', 'assets/FullTile_9.png');
     this.load.image('lava', 'assets/MagmaTiledTurned.png');
     this.load.image('empty', 'assets/empty.png');
 
@@ -235,8 +313,10 @@ function create ()
 
     playerConfig.scene = this;
     this.player.create(playerConfig);    
-    if (this.background.blocks["full"][this.player.bx][this.player.by])
+    if (this.background.blocks["full"][this.player.bx][this.player.by]) {
         this.background.blocks["full"][this.player.bx][this.player.by].destroy();
+        this.background.setlevelMap(this.player.bx, this.player.by, 0);
+    }
     // enemy config
     let enemyConfig = {
         scene: this,
@@ -247,7 +327,7 @@ function create ()
         backgroundCellHeight: this.background.blockTextureHeight,
         speed: 50,
         isAnimation: true,
-    }   
+    };  
     this.enemy.create(enemyConfig); 
     
     // key binding setting
@@ -270,8 +350,6 @@ function create ()
     for (var i in collisionHandlers)
         for (var j in collisionHandlers[i]) {
             for (var k in collisionHandlers[i][j]) {
-                console.log(j,k,collsionObj[j],
-                            collsionObj[k]);
                 this.physics.add.overlap(
                     collsionObj[j],
                     collsionObj[k],

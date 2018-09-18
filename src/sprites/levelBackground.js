@@ -17,8 +17,11 @@ export class LevelBackground {
         
         for (var i = 0; i < this.blockWidth; i++) {
             for (var j = 0; j < this.blockHeight; j++) { 
-                if (!blockTexture.createFunction(
-                        this.getLevelMapTexture(i, j))) {                 
+                var v = this.getLevelMapTexture(i, j);
+                if (!v) {
+                    console.log("no texture exist!");
+                }
+                if (!blockTexture.createFunction(v)) {                 
                     continue;
                 } 
             
@@ -165,7 +168,7 @@ export class LevelBackground {
         let lavaConfig = {
             background: this,
             scene: this.scene,
-            lavaTileIndex: 5,
+            lavaTileIndex: config.lavaTileIndex,
             spreadSpeed: 5000,
             lavaContent: 3
         }
