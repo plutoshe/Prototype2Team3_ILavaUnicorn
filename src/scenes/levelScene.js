@@ -38,10 +38,10 @@ let blockTextures = {
         }
     },
     2 : {
-        group: "full_red",
-        texture: "lava",//full_red
+        group: "full",
+        texture: "full_red",//full_red
         createFunction: function(v) {
-            if (v.texture == "lava") 
+            if (v.texture == "full_red") 
                 return true;
             else return false;
         }

@@ -18,7 +18,7 @@ export class Lava {
         this.d = new Date();
         console.log(this.scene.time);
         this.scene.time.addEvent({
-            delay: 1000,
+            delay: 500,
             loop: true,
             callback: this.update,
             callbackScope: this,
@@ -38,7 +38,8 @@ export class Lava {
 	{
         var i;
         var didSomething = false;
-        for(i = 0; i < this.blocks.length; i++)
+        var count = this.blocks.length;
+        for(i = 0; i < count; i++)
         {
             var lavaBlock = this.blocks[i];
             if(this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] == 0)
@@ -97,19 +98,21 @@ export class Lava {
         var i;
         var didSomething = false;
         console.log(this.blocks);
-        for(i = 0; i < this.blocks.length; i++)
+        var count = this.blocks.length;
+        for(i = 0; i < count; i++)
         {
             var lavaBlock = this.blocks[i];
-            if(this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] == 0)
-            {
-                this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
-                if(!checkTupleInArray(this.blocks,[lavaBlock[0] + 1,lavaBlock[1]]))
+            if(lavaBlock[0]+1 < this.background.blockWidth)
+                if(this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] == 0)
                 {
-                    this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
-                    didSomething = true;
+                    this.background.levelMap[lavaBlock[0] + 1][lavaBlock[1]] = this.lavaTileIndex;
+                    if(!checkTupleInArray(this.blocks,[lavaBlock[0] + 1,lavaBlock[1]]))
+                    {
+                        this.blocks.push([lavaBlock[0] + 1,lavaBlock[1]]);
+                        didSomething = true;
+                    }
+                    console.log(this.blocks);
                 }
-                console.log(this.blocks);
-            }
             if(lavaBlock[0] > 0)
                 if(this.background.levelMap [ lavaBlock[0] - 1 ] [ lavaBlock[1] ] == 0)
                 {
@@ -121,17 +124,17 @@ export class Lava {
                     }
                     console.log(this.blocks);
                 }
-            
-            if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] == 0)
-            {
-                this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] = this.lavaTileIndex;
-                if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] + 1]))
+            if(lavaBlock[1]+1 < this.background.blockHeight)
+                if(this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] == 0)
                 {
-                    this.blocks.push([lavaBlock[0],lavaBlock[1] + 1]);
-                    didSomething = true;
+                    this.background.levelMap[lavaBlock[0]][lavaBlock[1] + 1] = this.lavaTileIndex;
+                    if(!checkTupleInArray(this.blocks,[lavaBlock[0],lavaBlock[1] + 1]))
+                    {
+                        this.blocks.push([lavaBlock[0],lavaBlock[1] + 1]);
+                        didSomething = true;
+                    }
+                    console.log(this.blocks);
                 }
-                console.log(this.blocks);
-            }
         }
         if(didSomething)
         {
