@@ -5,8 +5,8 @@ var collisionHandlers = {
 	    	"player_attack":
 	    		function attackRetrieve(player, attack) {
 	    			if (attack.canRecycle && 
-	    				(attack.vx != 0 && Math.abs(player.x - attack.x) < attack.dispearDistance ||
-	    				 attack.vy != 0 && Math.abs(player.y - attack.y) < attack.dispearDistance)) {
+	    				Math.abs(player.x - attack.x) < attack.dispearDistance && 
+	    				Math.abs(player.y - attack.y) < attack.dispearDistance) {
 	    			attack.setVisible(false);
 	    			attack.anims.pause();
 	    			attack.setVelocity(0, 0);
@@ -71,14 +71,45 @@ var collisionHandlers = {
 				},
 			"knight":
 				function rescueKnight(player, knight) {
-					knight.destroy();
+					if (Math.abs(knight.x - player.x) < player.sensitiveDistance &&
+	    				Math.abs(knight.y - player.y) < player.sensitiveDistance) {
+						knight.disableBody(true, true);
+					}
+					
 				},
 			"enemy":
 				function encounterEnemy(player, enemy) {
-					player.disableBody(true, true);
+					if (Math.abs(enemy.x - player.x) < player.sensitiveDistance &&
+	    				Math.abs(enemy.y - player.y) < player.sensitiveDistance) {
+						player.disableBody(true, true);
+					}
 				},
 		},
-		
+		"player_attack":{
+			"knight": 
+				function serveAttack(attack, knight) {
+					if (Math.abs(knight.x - attack.x) < attack.dispearDistance &&
+	    				Math.abs(knight.y - attack.y) < attack.dispearDistance) {
+						knight.disableBody(true, true);
+						attack.vx = -attack.vx;
+						attack.vy = -attack.vy;
+						attack.setVelocity(attack.vx, attack.vy);
+						attack.canRecycle = true;
+					}
+				},
+			"enemy":
+				function serveAttack(attack, enemy) {
+					if (attack.vx != 0 && Math.abs(enemy.x - attack.x) < attack.dispearDistance ||
+	    				 attack.vy != 0 && Math.abs(enemy.y - attack.y) < attack.dispearDistance) {
+						enemy.disableBody(true, true);
+						attack.vx = -attack.vx;
+						attack.vy = -attack.vy;
+						attack.setVelocity(attack.vx, attack.vy);
+						attack.canRecycle = true;
+					}
+
+				},
+		},
 		"enemy": {
         	"full_block": 
 				function overlapForBlock(player, block)
@@ -142,7 +173,7 @@ var collisionHandlers = {
     	}
 	},
 
-    }
+}
 
 export { collisionHandlers }
 

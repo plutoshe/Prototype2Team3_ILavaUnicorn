@@ -25,6 +25,7 @@ export class Player {
 			config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
 			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
 			"player_idle");
+		this.sensitiveDistance = this.backgroundCellHeight / 8;
 		this.sprite.play("player_idle");     
 		this.attack = this.scene.physics.add.sprite(
 			-1,-1,"player_attack");

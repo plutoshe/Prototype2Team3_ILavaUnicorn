@@ -264,40 +264,22 @@ function create ()
         "attack": Phaser.Input.Keyboard.KeyCodes.SPACE});
 
     // conllision setting
-
-    this.physics.add.overlap(
-        this.player.sprite,
-        this.enemy.sprite,
-        collisionHandlers["overlap"]["player"]["enemy"]);
-
-    this.physics.add.overlap(
-        this.player.sprite,
-        this.background.blockGroups["knight"],
-        collisionHandlers["overlap"]["player"]["knight"]);
-
-
-    this.physics.add.overlap(
-        this.player.sprite,
-        this.background.blockGroups["rock"],
-        collisionHandlers["collision"]["player"]["rock"]);
-
-    this.physics.add.overlap(
-        this.background.blockGroups["knight"],
-        this.background.blockGroups["rock"],
-        collisionHandlers["collision"]["knight"]["rock"]);
-
-
-    this.physics.add.overlap(
-        this.player.sprite,
-        this.player.attack,
-        collisionHandlers["overlap"]["player"]["player_attack"]);
-
-
-    this.physics.add.overlap(
-        this.enemy.sprite,
-        this.background.blockGroups["rock"],
-        collisionHandlers["collision"]["enemy"]["rock"]);
-    
+    var collsionObj = {
+        "knight": this.background.blockGroups["knight"],
+        "rock": this.background.blockGroups["rock"],
+        "player": this.player.sprite,
+        "enemy": this.enemy.sprite,
+        "player_attack": this.player.attack,
+    }
+    for (var i in collisionHandlers)
+        for (var j in collisionHandlers[i]) {
+            for (var k in collisionHandlers[i][j]) {
+                this.physics.add.overlap(
+                    collsionObj[j],
+                    collsionObj[k],
+                    collisionHandlers[i][j][k]);
+            }
+        }
 
     // initialization
     this.background.initialization();
