@@ -155,8 +155,9 @@ let entityTextures = [
         group: "knight",
         texture: "knight",
         animation: "knight",
-        backgroundBlockGroup: "full",
-        pos: [[1, 9], [12, 9], [0, 15], [11, 18], [3, 26], [12, 26]],
+        // backgroundBlockGroup: "full",
+        pos: [[1,9]],
+        //[[1, 9], [12, 9], [0, 15], [11, 18], [3, 26], [12, 26]],
     },
 ]
 
@@ -166,6 +167,7 @@ let backgroundConfig = {
     leftTopY: 0,  
     displayBlockWidth: 14, 
     displayBlockHeight: 18, 
+    successbackLimit: 3,
     blockWidth: 14,
     blockHeight: 29,
     lavaTileIndex: 13, 

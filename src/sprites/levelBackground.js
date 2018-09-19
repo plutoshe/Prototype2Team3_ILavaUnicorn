@@ -48,12 +48,15 @@ export class LevelBackground {
     addEntityTextureGroup(entityTexture) {
         var blocks;
         var blocksArr;
+        var textureColl;
         if (entityTexture.group in this.blockGroups) {
             blocks = this.blockGroups[entityTexture.group];
             blocksArr = this.blocks[entityTexture.group];
+            textureColl = this.EntityColl[entityTexture.group];
         } else {
             blocks = this.scene.physics.add.group();
             blocksArr = new2DArray(this.blockWidth, this.blockHeight);
+            textureColl = [];
         }
         for (var i in entityTexture.pos) {
             var ex = entityTexture.pos[i][0];
@@ -73,8 +76,9 @@ export class LevelBackground {
             block.setScale(this.blockTextureWidth / block.width, this.blockTextureHeight / block.height);
             blocksArr[ex][ey] = block; 
             this.entityMap[ex][ey] = entityTexture.group;
+            textureColl.push([block, ex, ey]);
         }
-        return [blocks, blocksArr];
+        return [blocks, blocksArr, textureColl];
     }
 
     checkStone(x, y) {
@@ -125,6 +129,7 @@ export class LevelBackground {
     create(config) {        
         this.leftTopX = config.leftTopX;
         this.leftTopY = config.leftTopY;
+        this.successbackLimit = config.successbackLimit;
         this.height = config.height;
         this.width = config.width;
 
@@ -143,6 +148,7 @@ export class LevelBackground {
         
         this.blockGroups = {};
         this.blocks = {};
+        this.EntityColl = {};
         this.scene = config.scene;
 
         for (var textureId in this.blockTextures){
@@ -154,16 +160,20 @@ export class LevelBackground {
             var tmp = this.addEntityTextureGroup(this.entityTextures[textureId]);
             this.blockGroups[this.entityTextures[textureId].group] = tmp[0];
             this.blocks[this.entityTextures[textureId].group] = tmp[1];
+            this.EntityColl[this.entityTextures[textureId].group] = tmp[2];
         }
  
-        this.stones = []
-        for (var i = 0; i < this.blockWidth; i++) {
-            for (var j = 0; j < this.blockHeight; j++) {
-                if (this.blocks["rock"][i][j]) {            
-                    this.stones.push([this.blocks["rock"][i][j], i, j]);
-                }
-            }
-        }
+        this.stones = this.EntityColl["rock"];
+        // for (var i = 0; i < this.blockWidth; i++) {
+        //     for (var j = 0; j < this.blockHeight; j++) {
+        //         if (this.blocks["rock"][i][j]) {            
+        //             this.stones.push([this.blocks["rock"][i][j], i, j]);
+        //         }
+        //         if (this.blocks["knight"][i][j]) {
+        //             this.remainingKnight++;
+        //         }
+        //     }
+        // }
 
         let lavaConfig = {
             background: this,
@@ -211,10 +221,13 @@ export class LevelBackground {
                     this.stones[i][0].anims.play("rock_broken");
                     this.stones[i][0].status = "broken";
                 }
-
             }
         }
-        //this.lava.update();
+        for (var i in this.EntityColl["knight"]) {
+            if (this.EntityColl["knight"][i][0].isRescue) {
+                this.EntityColl["knight"].splice(i,1);
+            }
+        }
     }
         
 }
