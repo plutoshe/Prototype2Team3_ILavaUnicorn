@@ -16,10 +16,13 @@ export class LevelBackground {
         }
         
         for (var i = 0; i < this.blockWidth; i++) {
-            for (var j = 0; j < this.blockHeight; j++) { 
+            for (var j = 0; j < this.blockHeight; j++) {
                 var v = this.getLevelMapTexture(i, j);
+                // console.log(i, j);
+                // console.log(this.levelMap[i]);
                 if (!v) {
                     console.log("no texture exist!");
+                    // continue;
                 }
                 if (!blockTexture.createFunction(v)) {                 
                     continue;
@@ -126,7 +129,8 @@ export class LevelBackground {
     // blockTexture: block texture
     // map: current map status
 
-    create(config) {        
+    create(config) {     
+        console.log(config);   
         this.leftTopX = config.leftTopX;
         this.leftTopY = config.leftTopY;
         this.successbackLimit = config.successbackLimit;
@@ -141,7 +145,8 @@ export class LevelBackground {
         this.displayBlockHeight = config.displayBlockHeight
         this.blockTextureHeight = config.height / config.displayBlockHeight;
         this.blockTextureWidth = config.width / config.displayBlockWidth;
-        this.levelMap = config.levelMap;
+        this.levelMap = config.levelMap[0].map(
+            (col, i) => config.levelMap.map(row => row[i]));
         this.entityMap = new2DArray(config.blockWidth, config.blockHeight);
         this.canvasWidth = this.blockWidth * this.blockTextureWidth;
         this.canvasHeight = this.blockHeight * this.blockTextureHeight;
