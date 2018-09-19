@@ -23,11 +23,6 @@ export var startScene = new Phaser.Class({
         this.background.setScale(this.game.config.width / this.background.width, 
             this.game.config.height / this.background.height);
         this.input.once('pointerdown', function (event) {
-            // this.scene.start('levelScene');
-            // console.log(this.constructor.name);
-            // this.game.scene.remove('levelScene');
-            // this.game.scene.add('levelScene', new levelScene(), true);
-
             this.scene.launch('levelScene');
         }, this);
     },

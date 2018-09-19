@@ -205,6 +205,10 @@ export class levelScene extends Phaser.Scene{
         return 0;
     }
 
+    changeStartScene() {
+        this.scene.start('startScene');
+    }
+
     update (){
         if (this.isGameFinished(this)) {  
             if (!this.isOver) {
@@ -232,9 +236,13 @@ export class levelScene extends Phaser.Scene{
                 playerActionSprite.play(playerAction);
                 this.isOver = true;
                 console.log("Game Finished");
-                this.scene.start('startScene');
-                console.log(this.scene.manager);
-
+                console.log(this.time);
+                this.time.addEvent({
+                    delay: 2500,
+                    callback: this.changeStartScene ,
+                    callbackScope: this,
+                    args: this
+                });
             }
             return;
         }

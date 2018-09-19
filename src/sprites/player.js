@@ -82,7 +82,6 @@ export class Player {
 
 
 	update() {
-		console.log(this.oldKey, this.scene.cursors['down'].isDown);
 		var playerTopLeft = this.sprite.getTopLeft();
     	var playerBottomRight = this.sprite.getBottomRight();
     	if (this.oldKey == "") {
