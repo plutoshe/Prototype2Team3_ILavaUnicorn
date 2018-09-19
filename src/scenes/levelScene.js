@@ -171,6 +171,7 @@ let backgroundConfig = {
     blockWidth: 14,
     blockHeight: 29,
     lavaTileIndex: 13, 
+    castleImage: "castle",
     levelMap: [
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -230,6 +231,8 @@ function preload ()
     this.load.image('full_black', 'assets/FullTile_9.png');
     this.load.image('lava', 'assets/MagmaTiledTurned.png');
     this.load.image('empty', 'assets/empty.png');
+
+    this.load.image("castle", "assets/castle.png");
 
     this.load.image('background_lose', "assets/background_lose.png");
     this.load.image('background_win', 'assets/background_win.png');

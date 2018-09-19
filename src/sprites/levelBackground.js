@@ -151,6 +151,7 @@ export class LevelBackground {
         this.EntityColl = {};
         this.scene = config.scene;
 
+        
         for (var textureId in this.blockTextures){
             var tmp = this.addBlockTextureGroup(this.blockTextures[textureId]);
             this.blockGroups[this.blockTextures[textureId].group] = tmp[0];
@@ -183,7 +184,14 @@ export class LevelBackground {
                 align: 'left' 
             }).setStroke('#de77ae', 16);
     
-        console.log(this.stones);
+        this.castle = this.scene.add.sprite(
+            config.width / 4 * 3,
+            this.successbackLimit * this.blockTextureHeight / 2,
+            config.castleImage);
+        this.castle.setScale(
+            1,
+            this.successbackLimit * this.blockTextureHeight / this.castle.height);
+
         
     }
 
