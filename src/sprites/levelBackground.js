@@ -164,17 +164,6 @@ export class LevelBackground {
         }
  
         this.stones = this.EntityColl["rock"];
-        // for (var i = 0; i < this.blockWidth; i++) {
-        //     for (var j = 0; j < this.blockHeight; j++) {
-        //         if (this.blocks["rock"][i][j]) {            
-        //             this.stones.push([this.blocks["rock"][i][j], i, j]);
-        //         }
-        //         if (this.blocks["knight"][i][j]) {
-        //             this.remainingKnight++;
-        //         }
-        //     }
-        // }
-
         let lavaConfig = {
             background: this,
             scene: this.scene,
@@ -183,7 +172,17 @@ export class LevelBackground {
             lavaContent: 3
         }
         this.lava.create(lavaConfig);
-
+        this.remainingKnightText = this.scene.add.text(
+            0, 
+            0, 
+            "Remaining Unicorn:\n 0", 
+            { 
+                fontFamily: "Arial Black", 
+                fontSize: 17, 
+                color: "#c51b7d", 
+                align: 'left' 
+            }).setStroke('#de77ae', 16);
+    
         console.log(this.stones);
         
     }
@@ -228,6 +227,9 @@ export class LevelBackground {
                 this.EntityColl["knight"].splice(i,1);
             }
         }
+        this.remainingKnightText.text = 
+            "Remaining Unicorn:\n " + 
+            this.EntityColl["knight"].length;
     }
         
 }
