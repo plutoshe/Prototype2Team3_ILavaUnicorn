@@ -78,20 +78,10 @@ export class Player {
     	return this.scene.background.getLevelMapGroup(bx, by) == "empty";
 	}
     
-    isGameFinished() {
-    	if (this.by < this.scene.background.successbackLimit && 
-			this.scene.background.EntityColl["knight"].length == 0)
-			return 1;
-		if (!this.sprite.active)
-			return 2;
-		return 0;
-    }
+    
+    
 
 	update() {
-		if (this.isGameFinished()) {
-			console.log("Game Finished")
-			return;
-		}
 		var playerTopLeft = this.sprite.getTopLeft();
     	var playerBottomRight = this.sprite.getBottomRight();
     	if (this.oldKey == "") {

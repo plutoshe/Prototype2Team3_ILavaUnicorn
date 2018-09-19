@@ -54,6 +54,8 @@ export class Lava {
 
     update()
     {
+        if (this.background.scene.isOver)
+            return;
         //this.gravityFill();
         this.floodFill();
 	}
