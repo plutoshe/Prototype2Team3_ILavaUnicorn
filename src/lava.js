@@ -13,7 +13,8 @@ export class Lava {
         this.lavaTileIndex = config.lavaTileIndex; // here, it'll be 4 or something
 		
         this.spreadSpeed = config.spreadSpeed;
-        this.lavaContent = 3;
+        this.successbackLimit = config.successbackLimit;
+        this.lavaContent = config.lavaContent;
         //this.timer = new Phaser.Timer();
         this.d = new Date();
         console.log(this.scene.time);
@@ -74,7 +75,7 @@ export class Lava {
                 var nx = lavaBlock[0] + floodFillDirectionArr[j][0];
                 var ny = lavaBlock[1] + floodFillDirectionArr[j][1];
                 if (nx >= 0 && nx < this.background.blockWidth &&
-                    ny >= 0 && ny < this.background.blockHeight &&
+                    ny >= this.successbackLimit && ny < this.background.blockHeight &&
                     !this.checkTupleInArray(nx, ny) && this.background.levelMap[nx][ny] == 0)
                     this.addNewLavaBlock(nx,ny);
             }
@@ -95,7 +96,7 @@ export class Lava {
                 var nx = lavaBlock[0] + floodFillDirectionArr[j][0];
                 var ny = lavaBlock[1] + floodFillDirectionArr[j][1];
                 if (nx >= 0 && nx < this.background.blockWidth &&
-                    ny >= 0 && ny < this.background.blockHeight &&
+                    ny >= this.successbackLimit && ny < this.background.blockHeight &&
                     !this.checkTupleInArray(nx, ny) && this.background.levelMap[nx][ny] == 0)
                     this.addNewLavaBlock(nx,ny);
             }

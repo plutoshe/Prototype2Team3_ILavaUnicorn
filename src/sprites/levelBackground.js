@@ -175,7 +175,8 @@ export class LevelBackground {
             scene: this.scene,
             lavaTileIndex: config.lavaTileIndex,
             spreadSpeed: 5000,
-            lavaContent: 3
+            lavaContent: 3,
+            successbackLimit: this.successbackLimit,
         }
         this.lava.create(lavaConfig);
         this.remainingKnightText = this.scene.add.text(
