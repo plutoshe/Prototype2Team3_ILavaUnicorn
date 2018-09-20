@@ -1,15 +1,34 @@
 
 export let enemyManagerConfig = {
-    enemies: [{
+    enemies: [
+    {x:11,y:21},{x:6, y:23},
+    {
         x: 6,
         y: 7, 
-    }, {
+    }, 
+    {
+        x: 6,
+        y: 8, 
+    },
+    {
+        x: 6,
+        y: 9, 
+    },
+    {
         x: 9,
         y: 15,
+    },
+    {
+        x: 9,
+        y: 13,
+    },
+    {
+        x:11,
+        y:4,
     }],
 
     defaultTexture: 'enemy1',
-    defaultSpeed: 50,  
+    defaultSpeed: 180,  
     defaultIsAnimation: true,
 };  
 
@@ -153,8 +172,8 @@ export let entityTextures = [
         texture: "knight",
         animation: "knight",
         // backgroundBlockGroup: "full",
-        pos: [[1,9]],
-        //[[1, 9], [12, 9], [0, 15], [11, 18], [3, 26], [12, 26]],
+        // pos: [[1,9]],
+        pos: [[1, 9], [12, 9], [0, 15], [11, 18], [3, 26], [12, 26]],
     },
 ]
 

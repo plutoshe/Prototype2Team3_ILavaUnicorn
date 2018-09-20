@@ -204,8 +204,9 @@ export class LevelBackground {
     initialization() {
         for (var i = 0; i < this.blockWidth; i++) {
             for (var j = 1; j < this.blockHeight; j++) {
-                if (this.getLevelMapGroup(i, j) == "empty")
+                if (this.getLevelMapGroup(i, j) == "empty") {
                     this.checkStone(i, j - 1);
+                }
             }
         }
     }
@@ -241,6 +242,8 @@ export class LevelBackground {
                 this.EntityColl["knight"].splice(i,1);
             }
         }
+        if (this.scene.cameras.main.midPoint.y - this.height / 2 >= 0)
+            this.remainingKnightText.y = this.scene.cameras.main.midPoint.y - this.height / 2;
         this.remainingKnightText.text = 
             "Remaining Unicorn:\n " + 
             this.EntityColl["knight"].length;
