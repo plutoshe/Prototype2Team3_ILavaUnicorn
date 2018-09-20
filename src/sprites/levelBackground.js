@@ -242,6 +242,8 @@ export class LevelBackground {
                 this.EntityColl["knight"].splice(i,1);
             }
         }
+        if (this.scene.cameras.main.midPoint.y - this.height / 2 >= 0)
+            this.remainingKnightText.y = this.scene.cameras.main.midPoint.y - this.height / 2;
         this.remainingKnightText.text = 
             "Remaining Unicorn:\n " + 
             this.EntityColl["knight"].length;

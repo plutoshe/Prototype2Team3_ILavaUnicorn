@@ -28,7 +28,7 @@ export let enemyManagerConfig = {
     }],
 
     defaultTexture: 'enemy1',
-    defaultSpeed: 50,  
+    defaultSpeed: 180,  
     defaultIsAnimation: true,
 };  
 

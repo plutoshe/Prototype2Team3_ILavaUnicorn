@@ -146,7 +146,7 @@ export class levelScene extends Phaser.Scene{
         playerConfig.scene = this;
         this.player.create(playerConfig);    
         if (this.background.blocks["full"][this.player.bx][this.player.by]) {
-            this.background.blocks["full"][this.player.bx][this.player.by].destroy();
+            this.background.blocks["full"][this.player.bx][this.player.by].setVisible(false);
             this.background.setlevelMap(this.player.bx, this.player.by, 0);
         }
         // enemy config
