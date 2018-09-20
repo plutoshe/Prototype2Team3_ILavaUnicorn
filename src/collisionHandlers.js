@@ -125,7 +125,7 @@ var collisionHandlers = {
 				// player.disableBody(true, true);
 				// player.disableBody(true, true);
 			},
-			"enemy": function(enemy, lava) {
+			"enemy": function(lava, enemy) {
 				console.log("enemy meets lava");
 				enemy.disableBody(true, true);
 			},

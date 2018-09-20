@@ -13,19 +13,21 @@ export class Enemy {
 
     create(config)
     {
+    	console.log(config);
         this.scene = config.scene;
+        this.manager = config.enemyManager;
 		this.backgroundCellWidth = config.backgroundCellWidth;
     	this.backgroundCellHeight = config.backgroundCellHeight;
     	console.log(config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
 			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
-			config.playerTexture);
+			config.enemyTexture);
 
 		this.sprite = this.scene.physics.add.sprite(
 			config.x * this.backgroundCellWidth + config.backgroundCellWidth / 2, 
 			config.y * this.backgroundCellHeight + config.backgroundCellHeight / 2, 
-			config.playerTexture);
+			config.enemyTexture);
 		if (config.isAnimation) {
-			this.sprite.play(config.playerTexture);
+			this.sprite.play(config.enemyTexture);
 		}
 		// console.log(this.backgroundCellWidth / this.sprite.width, this.backgroundCellHeight / this.sprite.height);
 

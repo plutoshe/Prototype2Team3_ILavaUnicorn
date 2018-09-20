@@ -1,9 +1,9 @@
 import { LevelBackground } from "../sprites/levelBackground.js"
 import { Player } from "../sprites/player.js"
 import {collisionHandlers} from "../collisionHandlers.js"
-import { Enemy } from "../enemy.js"
 import { Lava } from "../lava.js"
-import {blockTextures, entityTextures, backgroundConfig, playerConfig} 
+import {EnemyManager} from "../enemyManager.js"
+import {blockTextures, entityTextures, backgroundConfig, playerConfig, enemyManagerConfig} 
     from "./levelSceneConfig.js"
 
 
@@ -122,7 +122,7 @@ export class levelScene extends Phaser.Scene{
 
         this.background = new LevelBackground();
         this.player = new Player();
-        this.enemy = new Enemy();
+        this.enemyManager = new EnemyManager();
 
         this.cameras.main.setBounds(
             0,
@@ -150,17 +150,10 @@ export class levelScene extends Phaser.Scene{
             this.background.setlevelMap(this.player.bx, this.player.by, 0);
         }
         // enemy config
-        let enemyConfig = {
-            scene: this,
-            x: 6,
-            y: 7,
-            playerTexture: 'enemy1',
-            backgroundCellWidth: this.background.blockTextureWidth,
-            backgroundCellHeight: this.background.blockTextureHeight,
-            speed: 50,
-            isAnimation: true,
-        };  
-        this.enemy.create(enemyConfig); 
+        enemyManagerConfig.scene = this;
+        enemyManagerConfig.backgroundCellWidth = this.background.blockTextureWidth;
+        enemyManagerConfig.backgroundCellHeight = this.background.blockTextureHeight;
+        this.enemyManager.create(enemyManagerConfig); 
         
         // key binding setting
 
@@ -169,7 +162,7 @@ export class levelScene extends Phaser.Scene{
             "knight": this.background.blockGroups["knight"],
             "rock": this.background.blockGroups["rock"],
             "player": this.player.sprite,
-            "enemy": this.enemy.sprite,
+            "enemy": this.enemyManager.enemyGroup,
             "player_attack": this.player.attack,
             "lava": this.background.lava.blocksGroup, 
         }
@@ -221,17 +214,21 @@ export class levelScene extends Phaser.Scene{
                     playerAction = "player_lose";
                     flag = "flag_lose";
                 }
-                var transparentBackground = this.add.sprite(this.game.config.width / 2, 
-                                this.game.config.height / 2, 
+                var camera = this.cameras.main;
+                var transparentBackground = this.add.sprite(
+                                camera.midPoint.x, 
+                                camera.midPoint.y, 
                                 backgroundGameFinished);
                 transparentBackground.setScale(
                         this.game.config.width / transparentBackground.width,
                         this.game.config.height / transparentBackground.height);
-                this.add.sprite(this.game.config.width / 2, 
-                                this.game.config.height / 4,
+                this.add.sprite(camera.midPoint.x, 
+                                camera.midPoint.y 
+                                    - this.game.config.height / 4,
                                 flag);
-                var playerActionSprite = this.add.sprite(this.game.config.width / 2, 
-                                this.game.config.height / 2,
+                var playerActionSprite = this.add.sprite(
+                                camera.midPoint.x, 
+                                camera.midPoint.y,
                                 playerAction);
                 playerActionSprite.play(playerAction);
                 this.isOver = true;
@@ -248,6 +245,6 @@ export class levelScene extends Phaser.Scene{
         }
         this.background.update();
         this.player.update();
-        this.enemy.update();
+        this.enemyManager.update();
     }
 }
