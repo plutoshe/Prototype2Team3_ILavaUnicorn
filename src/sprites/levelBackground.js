@@ -204,8 +204,9 @@ export class LevelBackground {
     initialization() {
         for (var i = 0; i < this.blockWidth; i++) {
             for (var j = 1; j < this.blockHeight; j++) {
-                if (this.getLevelMapGroup(i, j) == "empty")
+                if (this.getLevelMapGroup(i, j) == "empty") {
                     this.checkStone(i, j - 1);
+                }
             }
         }
     }
