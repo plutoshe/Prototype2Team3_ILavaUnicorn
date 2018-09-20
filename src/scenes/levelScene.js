@@ -59,6 +59,11 @@ export class levelScene extends Phaser.Scene{
                               { frameWidth: 128, frameHeight: 128 });
         this.load.spritesheet('player_lose', 'assets/player_lose.png', 
                               { frameWidth: 128, frameHeight: 128 });
+
+        //Dug_clean.ogg
+        this.load.audio('bgm', 'assets/audio/Dug_clean.ogg');
+        this.load.audio('win_sound','assets/audio/Dug_win.ogg');
+        this.load.audio('lose_sound','assets/audio/Dug_lose.ogg');
     }
     create ()
     {
@@ -187,6 +192,22 @@ export class levelScene extends Phaser.Scene{
         
         this.player.initialization();    
         this.isOver = false;
+        
+        // adding in the audio
+        var music = this.sound.add('bgm',
+        {
+            loop: true,
+            volume: 0.7
+        });
+        this.sound.add('win_sound',
+        {
+            volume: 0.7
+        });
+        this.sound.add('lose_sound',
+        {
+            volume: 0.7
+        });
+        music.play();
     }
 
     isGameFinished(game) {
@@ -209,10 +230,12 @@ export class levelScene extends Phaser.Scene{
                 var backgroundGameFinished = "background_win";
                 var playerAction = "player_win";
                 var flag = "flag_win";
+                var sound = 'win_sound';
                 if (status == 2) {
                     backgroundGameFinished = "background_lose";
                     playerAction = "player_lose";
                     flag = "flag_lose";
+                    sound = 'lose_sound';
                 }
                 var camera = this.cameras.main;
                 var transparentBackground = this.add.sprite(
@@ -234,6 +257,8 @@ export class levelScene extends Phaser.Scene{
                 this.isOver = true;
                 console.log("Game Finished");
                 console.log(this.time);
+                this.sound.pauseAll();
+                this.sound.play(sound);
                 this.time.addEvent({
                     delay: 2500,
                     callback: this.changeStartScene ,
