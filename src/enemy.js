@@ -69,7 +69,7 @@ export class Enemy {
 		else 
 		{
 			moveComplete = this.move(this.oldKey);
-			while(!moveComplete)
+			while(!moveComplete && i < move_list.length)
 			{
 				moveComplete = this.move(move_list[i]);
 				i = i + 1;
@@ -268,7 +268,6 @@ function shuffle(array) {
   
 	// While there remain elements to shuffle...
 	while (0 !== currentIndex) {
-  
 	  // Pick a remaining element...
 	  randomIndex = Math.floor(Math.random() * currentIndex);
 	  currentIndex -= 1;

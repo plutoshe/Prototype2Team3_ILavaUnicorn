@@ -122,8 +122,6 @@ var collisionHandlers = {
 	    			Math.abs(lava.y - player.y) < player.sensitiveDistance) {
 					player.disableBody(true, true);
 				}
-				// player.disableBody(true, true);
-				// player.disableBody(true, true);
 			},
 			"enemy": function(lava, enemy) {
 				console.log("enemy meets lava");

@@ -23,7 +23,7 @@ export var startScene = new Phaser.Class({
         this.background.setScale(this.game.config.width / this.background.width, 
             this.game.config.height / this.background.height);
         this.input.once('pointerdown', function (event) {
-            this.scene.launch('levelScene');
+            this.scene.start('levelScene');
         }, this);
     },
 
