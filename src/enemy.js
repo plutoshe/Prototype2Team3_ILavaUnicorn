@@ -1,4 +1,4 @@
-
+/* Class that defines enemy movement and AI */
 export class Enemy {     
 
     trim(pos, divider) {
@@ -8,7 +8,7 @@ export class Enemy {
 
     attack()
     {
-
+		// placeholder for future enemy attacking functionality a la Fygars.
     }
 
     create(config)
@@ -152,17 +152,7 @@ export class Enemy {
 		return moveComplete;
 	}
 
-    checkBackgroundCollision()
-    {
-
-    }
-
-    checkPlayerCollision()
-    {
-
-    }
-
-    chase(player)
+    chase(player)/* Extremely sophisticated AI that chases the Player using a ladder of if-statements. */
     {
         var bx = Math.floor(this.sprite.x / this.backgroundCellWidth);
 		var by = Math.floor(this.sprite.y / this.backgroundCellHeight);
@@ -172,15 +162,15 @@ export class Enemy {
 		var dx = bx - pl_bx;// +ve if enemy is to the right of the player
 		var dy = by - pl_by;// +ve if enemy is below the player
 
-		var move_list = [];
+		var move_list = [];// a list of possible moves the enemy could make in order of preference. So basically, the enemy first tries to move in the direction of move_list[0], and if it can't then it tries move_list[1], etc.
 
 		// extremely advanced AI
 		if( Math.abs(dx) < Math.abs(dy) ) // going up/down is faster
 		{
-			if(dy > 0)
+			if(dy > 0) // enemy is below the player, so we need to move upwards
 			{
 				move_list.push("up");
-				if(dx > 0)
+				if(dx > 0) // enemy is to the right of the player, so we want to move left
 				{
 					move_list.push("left");
 					move_list.push("right");
