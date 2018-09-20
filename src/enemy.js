@@ -69,7 +69,7 @@ export class Enemy {
 		else 
 		{
 			moveComplete = this.move(this.oldKey);
-			while(!moveComplete)
+			while(i < move_list.length)
 			{
 				moveComplete = this.move(move_list[i]);
 				i = i + 1;
