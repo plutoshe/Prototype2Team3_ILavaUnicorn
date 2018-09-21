@@ -10,7 +10,7 @@ export class Lava {
         this.background = config.background;
         this.scene = config.scene;
         
-        this.lavaTileIndex = config.lavaTileIndex; // here, it'll be 4 or something
+        this.lavaTileIndex = config.lavaTileIndex; // this links to the background.levelMap
 		
         this.spreadSpeed = config.spreadSpeed;
         this.successbackLimit = config.successbackLimit;
@@ -18,8 +18,8 @@ export class Lava {
         //this.timer = new Phaser.Timer();
         this.d = new Date();
         console.log(this.scene.time);
-        this.scene.time.addEvent({
-            delay: 500,
+        this.scene.time.addEvent({// this creates a delay between each block advance of the lava
+            delay: 500, // Set lava speed here! this should actually be set to this.spreadSpeed, but meh. 
             loop: true,
             callback: this.update,
             callbackScope: this,
@@ -57,8 +57,8 @@ export class Lava {
     {
         if (this.background.scene.isOver)
             return;
-        //this.gravityFill();
-        this.floodFill();
+        //this.gravityFill(); // this uses the lava-fill algorithm that basically means lava won't flow upwards
+        this.floodFill(); // all of the lava.
 	}
 	
 	floodFill()
@@ -82,7 +82,7 @@ export class Lava {
         }
     }
 
-    gravityFill()
+    gravityFill() 
 	{
         var floodFillDirectionArr = [[1,0],[-1,0],[0,1]];
         var i;
@@ -119,10 +119,4 @@ export class Lava {
         return false;
     }
 
-}
-
-
-var update = function(lava)
-{
-    lava.gravityFill();
 }
