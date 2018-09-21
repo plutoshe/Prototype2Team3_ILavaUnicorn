@@ -152,7 +152,7 @@ export class Enemy {
 		return moveComplete;
 	}
 
-    chase(player)/* Extremely sophisticated AI that chases the Player using a ladder of if-statements. */
+    chase(player)/* "Extremely sophisticated AI" that chases the Player using a ladder of if-statements. */
     {
         var bx = Math.floor(this.sprite.x / this.backgroundCellWidth);
 		var by = Math.floor(this.sprite.y / this.backgroundCellHeight);
@@ -173,22 +173,22 @@ export class Enemy {
 				if(dx > 0) // enemy is to the right of the player, so we want to move left
 				{
 					move_list.push("left");
-					move_list.push("right");
+					move_list.push("right");// these two would basically be useless moves, but we still want them to be possible
 					move_list.push("down");
 				}	
 				else
 				{
-					move_list.push("right");
+					move_list.push("right");// move right instead
 					move_list.push("left");
 					move_list.push("down");
 				}
 			}
 			else
 			{
-				move_list.push("down");
+				move_list.push("down"); // move down instead
 				if(dx > 0)
 				{
-					move_list.push("left");
+					move_list.push("left"); // I think you get the gyst by now
 					move_list.push("right");
 					move_list.push("up");
 				}	
@@ -201,7 +201,7 @@ export class Enemy {
 			}
 
 		}
-		else
+		else // this handles the reverse: if it's more efficient to move horizontally instead of vertically
 		{
 			if(dx > 0)
 			{
@@ -237,7 +237,7 @@ export class Enemy {
 			}
 
 		}
-		var random_prob = 0.2;
+		var random_prob = 0.2;// this "dumbs down" the AI a little by shuffling the move_list with a random probability. Otherwise, the AI chases down the player pretty aggressively
 		if(Math.random() < random_prob)
 			shuffle(move_list);
 		return move_list;
@@ -245,14 +245,15 @@ export class Enemy {
 
     runaway(object)
     {
-
+		// placeholder for AI that will run away or try to avoid falling rocks or lava
     }
 
     ghost()
     {
-        
+        // placeholder for "ghost mode", where enemies can ghost through dirt
     }
 }
+// shuffles the move_list for us
 function shuffle(array) {
 	var currentIndex = array.length, temporaryValue, randomIndex;
   
